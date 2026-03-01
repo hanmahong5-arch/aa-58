@@ -32,7 +32,7 @@ import com.aionemu.gameserver.model.templates.item.upgrade.ItemUpgradeTemplate;
 import com.aionemu.gameserver.model.templates.item.upgrade.UpgradeResultItem;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Ranastic (Encom)
@@ -48,14 +48,14 @@ public class ItemUpgradeData {
 	protected List<ItemUpgradeTemplate> itemUpgradeTemplates;
 
 	private TIntObjectHashMap<ItemUpgradeTemplate> itemUpgradeSets;
-	private FastMap<Integer, FastMap<Integer, UpgradeResultItem>> upgradeResultItemMap;
+	private ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, UpgradeResultItem>> upgradeResultItemMap;
 
 	void afterUnmarshal(Unmarshaller u, Object parent) {
 		itemUpgradeSets = new TIntObjectHashMap<ItemUpgradeTemplate>();
-		upgradeResultItemMap = new FastMap<Integer, FastMap<Integer, UpgradeResultItem>>();
+		upgradeResultItemMap = new ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, UpgradeResultItem>>();
 		for (ItemUpgradeTemplate set : itemUpgradeTemplates) {
 			itemUpgradeSets.put(set.getUpgrade_base_item_id(), set);
-			upgradeResultItemMap.put(set.getUpgrade_base_item_id(), new FastMap<Integer, UpgradeResultItem>());
+			upgradeResultItemMap.put(set.getUpgrade_base_item_id(), new ConcurrentHashMap<Integer, UpgradeResultItem>());
 			if (!set.getUpgrade_result_item().isEmpty()) {
 				for (UpgradeResultItem resultItem : set.getUpgrade_result_item()) {
 					upgradeResultItemMap.get(set.getUpgrade_base_item_id()).put(resultItem.getItem_id(), resultItem);
@@ -69,7 +69,7 @@ public class ItemUpgradeData {
 		return itemUpgradeSets.get(itemSetId);
 	}
 
-	public FastMap<Integer, UpgradeResultItem> getResultItemMap(int baseItemId) {
+	public ConcurrentHashMap<Integer, UpgradeResultItem> getResultItemMap(int baseItemId) {
 		if (upgradeResultItemMap.containsKey(baseItemId)) {
 			if (!upgradeResultItemMap.get(baseItemId).isEmpty()) {
 				return upgradeResultItemMap.get(baseItemId);

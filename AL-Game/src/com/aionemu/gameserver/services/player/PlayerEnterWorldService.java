@@ -144,7 +144,7 @@ import com.aionemu.gameserver.utils.stats.AbyssRankEnum;
 import com.aionemu.gameserver.world.World;
 import com.aionemu.gameserver.world.knownlist.Visitor;
 
-import javolution.util.FastList;
+import java.util.ArrayList;
 
 public final class PlayerEnterWorldService {
 
@@ -342,8 +342,8 @@ public final class PlayerEnterWorldService {
 			if (EventsConfig.ENABLE_EVENT_ARCADE) {
 				ArcadeUpgradeService.getInstance().onEnterWorld(player);
 			}
-			FastList<QuestState> questList = FastList.newInstance();
-			FastList<QuestState> completeQuestList = FastList.newInstance();
+			ArrayList<QuestState> questList = new ArrayList<>();
+			ArrayList<QuestState> completeQuestList = new ArrayList<>();
 			for (QuestState qs : player.getQuestStateList().getAllQuestState()) {
 				if (qs.getStatus() == QuestStatus.NONE && qs.getCompleteCount() == 0) {
 					continue;

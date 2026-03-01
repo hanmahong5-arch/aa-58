@@ -124,11 +124,6 @@ public class BIHTree implements CollisionData {
 		}
 
 		BoundingBox bbox = new BoundingBox(min, max);
-		Vector3f.recycle(min);
-		Vector3f.recycle(max);
-		Vector3f.recycle(v1);
-		Vector3f.recycle(v2);
-		Vector3f.recycle(v3);
 		return bbox;
 	}
 
@@ -153,9 +148,6 @@ public class BIHTree implements CollisionData {
 			}
 		}
 
-		Vector3f.recycle(v1);
-		Vector3f.recycle(v2);
-		Vector3f.recycle(v3);
 		pivot = (pivot == l && j < pivot) ? j : pivot;
 		return pivot;
 	}

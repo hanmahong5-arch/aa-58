@@ -56,4 +56,17 @@ public abstract class AbyssRankDAO implements DAO {
 	public abstract void updateRankList();
 
 	public abstract void removePlayer(List<Player> listP);
+
+	// --- GP quota ranking methods (from 4.8) ---
+
+	/**
+	 * Apply daily GP loss for all offline players at the given officer rank.
+	 */
+	public abstract void dailyUpdateGp(AbyssRankEnum rank, int gpLoss);
+
+	/**
+	 * Modify GP for an offline player directly in DB.
+	 * @param addStats if true, also update daily_gp and weekly_gp counters
+	 */
+	public abstract void addGp(int playerId, int amount, boolean addStats);
 }

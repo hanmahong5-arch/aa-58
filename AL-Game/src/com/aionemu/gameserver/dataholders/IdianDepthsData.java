@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import com.aionemu.gameserver.model.idiandepths.IdianDepthsLocation;
 import com.aionemu.gameserver.model.templates.idiandepths.IdianDepthsTemplate;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Rinzler (Encom)
@@ -41,7 +41,7 @@ public class IdianDepthsData {
 	private List<IdianDepthsTemplate> idianDepthsTemplates;
 
 	@XmlTransient
-	private FastMap<Integer, IdianDepthsLocation> idianDepths = new FastMap<Integer, IdianDepthsLocation>();
+	private ConcurrentHashMap<Integer, IdianDepthsLocation> idianDepths = new ConcurrentHashMap<Integer, IdianDepthsLocation>();
 
 	void afterUnmarshal(Unmarshaller u, Object parent) {
 		for (IdianDepthsTemplate template : idianDepthsTemplates) {
@@ -53,7 +53,7 @@ public class IdianDepthsData {
 		return idianDepths.size();
 	}
 
-	public FastMap<Integer, IdianDepthsLocation> getIdianDepthsLocations() {
+	public ConcurrentHashMap<Integer, IdianDepthsLocation> getIdianDepthsLocations() {
 		return idianDepths;
 	}
 }

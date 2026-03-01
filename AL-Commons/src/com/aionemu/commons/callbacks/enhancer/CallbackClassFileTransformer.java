@@ -42,9 +42,10 @@ public abstract class CallbackClassFileTransformer implements ClassFileTransform
     public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
             ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
         try {
-            // 跳过ExtClassLoader加载的系统类
-            // Skip system classes loaded by ExtClassLoader
-            if (loader != null && !loader.getClass().getName().equals("sun.misc.Launcher$ExtClassLoader")) {
+            // Skip platform/extension class loader and bootstrap (null) loader.
+            // On Java 9+, the extension class loader is the platform class loader,
+            // which is the parent of the system (application) class loader.
+            if (loader != null && loader != ClassLoader.getPlatformClassLoader()) {
                 return this.transformClass(loader, classfileBuffer);
             } else {
                 log.trace("Class " + className + " ignored.");
@@ -53,9 +54,8 @@ public abstract class CallbackClassFileTransformer implements ClassFileTransform
         } catch (Exception var8) {
             Error e1 = new Error("Can't transform class " + className, var8);
             log.error(e1.getMessage(), e1);
-            // AppClassLoader加载失败时强制退出
-            // Force exit when AppClassLoader fails to load
-            if (loader.getClass().getName().equals("sun.misc.Launcher$AppClassLoader")) {
+            // Force exit when the system (application) class loader fails to load
+            if (loader == ClassLoader.getSystemClassLoader()) {
                 Runtime.getRuntime().halt(1);
             }
             throw e1;

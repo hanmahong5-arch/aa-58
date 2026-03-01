@@ -28,15 +28,15 @@ import com.aionemu.gameserver.model.templates.item.ItemTemplate;
 import com.aionemu.gameserver.network.aion.AionConnection;
 import com.aionemu.gameserver.network.aion.AionServerPacket;
 
-import javolution.util.FastList;
+import java.util.ArrayList;
 
 public class SM_LOOT_ITEMLIST extends AionServerPacket {
 	private int targetObjectId;
-	private FastList<DropItem> dropItems;
+	private ArrayList<DropItem> dropItems;
 
 	public SM_LOOT_ITEMLIST(int targetObjectId, Set<DropItem> setItems, Player player) {
 		this.targetObjectId = targetObjectId;
-		this.dropItems = new FastList<DropItem>();
+		this.dropItems = new ArrayList<DropItem>();
 		if (setItems == null) {
 			LoggerFactory.getLogger(SM_LOOT_ITEMLIST.class).warn("null Set<DropItem>, skip");
 			return;
@@ -66,6 +66,5 @@ public class SM_LOOT_ITEMLIST extends AionServerPacket {
 			//writeC(!template.getCategory().equals(ItemCategory.QUEST) && !template.isTradeable() ? 1 : 0); //Calls up a window when selecting loot that meets the criteria. Do we need this?
             writeC(0); //No windows, no freedom of loot.
 		}
-		FastList.recycle(dropItems);
 	}
 }

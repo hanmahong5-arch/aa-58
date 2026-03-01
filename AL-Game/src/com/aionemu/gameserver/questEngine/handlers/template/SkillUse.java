@@ -28,17 +28,17 @@ import com.aionemu.gameserver.questEngine.model.QuestEnv;
 import com.aionemu.gameserver.questEngine.model.QuestState;
 import com.aionemu.gameserver.questEngine.model.QuestStatus;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SkillUse extends QuestHandler {
 
 	private final int questId;
 	private final int startNpc;
 	private final int endNpc;
-	private final FastMap<List<Integer>, QuestSkillData> qsd;
+	private final ConcurrentHashMap<List<Integer>, QuestSkillData> qsd;
 	private final Map<String, Long> lastSkillUseCache = new HashMap<String, Long>();
 	
-	public SkillUse(int questId, int startNpc, int endNpc, FastMap<List<Integer>, QuestSkillData> qsd) {
+	public SkillUse(int questId, int startNpc, int endNpc, ConcurrentHashMap<List<Integer>, QuestSkillData> qsd) {
 		super(questId);
 		this.questId = questId;
 		this.startNpc = startNpc;

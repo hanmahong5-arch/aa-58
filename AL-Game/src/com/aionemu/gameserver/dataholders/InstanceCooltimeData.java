@@ -31,14 +31,14 @@ import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.templates.InstanceCooltime;
 import com.aionemu.gameserver.services.instance.InstanceService;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "instance_cooltimes")
 public class InstanceCooltimeData {
 	@XmlElement(name = "instance_cooltime", required = true)
 	protected List<InstanceCooltime> instanceCooltime;
-	private FastMap<Integer, InstanceCooltime> instanceCooltimes = new FastMap<Integer, InstanceCooltime>();
+	private ConcurrentHashMap<Integer, InstanceCooltime> instanceCooltimes = new ConcurrentHashMap<Integer, InstanceCooltime>();
 	private HashMap<Integer, Integer> syncIdToMapId = new HashMap<Integer, Integer>();
 
 	void afterUnmarshal(Unmarshaller u, Object parent) {
@@ -49,7 +49,7 @@ public class InstanceCooltimeData {
 		instanceCooltime.clear();
 	}
 
-	public FastMap<Integer, InstanceCooltime> getAllInstances() {
+	public ConcurrentHashMap<Integer, InstanceCooltime> getAllInstances() {
 		return instanceCooltimes;
 	}
 

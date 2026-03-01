@@ -18,6 +18,7 @@ package com.aionemu.gameserver.world.container;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +27,7 @@ import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.world.exceptions.DuplicateAionObjectException;
 import com.aionemu.gameserver.world.knownlist.Visitor;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Container for storing Players by objectId and name.
@@ -40,11 +41,11 @@ public class PlayerContainer implements Iterable<Player> {
 	/**
 	 * Map<ObjectId,Player>
 	 */
-	private final FastMap<Integer, Player> playersById = new FastMap<Integer, Player>().shared();
+	private final ConcurrentHashMap<Integer, Player> playersById = new ConcurrentHashMap<Integer, Player>();
 	/**
 	 * Map<Name,Player>
 	 */
-	private final FastMap<String, Player> playersByName = new FastMap<String, Player>().shared();
+	private final ConcurrentHashMap<String, Player> playersByName = new ConcurrentHashMap<String, Player>();
 
 	/**
 	 * Add Player to this Container.
@@ -103,8 +104,7 @@ public class PlayerContainer implements Iterable<Player> {
 	@SuppressWarnings("unused")
 	public void doOnAllPlayers(Visitor<Player> visitor) {
 		try {
-			for (FastMap.Entry<Integer, Player> e = playersById.head(),
-					mapEnd = playersById.tail(); (e = e.getNext()) != mapEnd;) {
+			for (Map.Entry<Integer, Player> e : playersById.entrySet()) {
 				Player player = e.getValue();
 				if (player != null) {
 					visitor.visit(player);

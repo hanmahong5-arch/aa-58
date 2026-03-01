@@ -39,6 +39,7 @@ import ch.qos.logback.core.joran.spi.JoranException;
 import com.aionemu.commons.database.DatabaseFactory;
 import com.aionemu.commons.database.dao.DAOManager;
 import com.aionemu.commons.services.CronService;
+import com.aionemu.loginserver.dao.LoginDAORegistry;
 import com.aionemu.commons.utils.AEInfos;
 import com.aionemu.commons.utils.ExitCode;
 import com.aionemu.loginserver.configs.Config;
@@ -119,6 +120,7 @@ public class LoginServer {
         log.info("\f" + new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(new Date(System.currentTimeMillis())) + "\f");
         Config.load();
         DatabaseFactory.init();
+        LoginDAORegistry.init();
         DAOManager.init();
 
         /**

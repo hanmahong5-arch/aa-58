@@ -24,7 +24,7 @@ import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.templates.towerofeternity.TowerOfEternityTemplate;
 import com.aionemu.gameserver.services.towerofeternityservice.TowerOfEternity;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Wnkrz on 22/08/2017.
@@ -35,7 +35,7 @@ public class TowerOfEternityLocation {
 	protected boolean isActive;
 	protected TowerOfEternityTemplate template;
 	protected TowerOfEternity<TowerOfEternityLocation> activeTowerOfEternity;
-	protected FastMap<Integer, Player> players = new FastMap<Integer, Player>();
+	protected ConcurrentHashMap<Integer, Player> players = new ConcurrentHashMap<Integer, Player>();
 	private final List<VisibleObject> spawned = new ArrayList<VisibleObject>();
 
 	public TowerOfEternityLocation() {
@@ -75,7 +75,7 @@ public class TowerOfEternityLocation {
 		return spawned;
 	}
 
-	public FastMap<Integer, Player> getPlayers() {
+	public ConcurrentHashMap<Integer, Player> getPlayers() {
 		return players;
 	}
 }

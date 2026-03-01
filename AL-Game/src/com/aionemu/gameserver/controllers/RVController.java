@@ -35,12 +35,12 @@ import com.aionemu.gameserver.services.rift.RiftManager;
 import com.aionemu.gameserver.services.teleport.TeleportService2;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class RVController extends NpcController {
 	private boolean isMaster = false;
 	private boolean isVortex = false;
-	protected FastMap<Integer, Player> passedPlayers = new FastMap<Integer, Player>();
+	protected ConcurrentHashMap<Integer, Player> passedPlayers = new ConcurrentHashMap<Integer, Player>();
 	private SpawnTemplate slaveSpawnTemplate;
 	private Npc slave;
 	private Integer minLevel;
@@ -209,7 +209,7 @@ public class RVController extends NpcController {
 		return deSpawnedTime - (int) (System.currentTimeMillis() / 1000);
 	}
 
-	public FastMap<Integer, Player> getPassedPlayers() {
+	public ConcurrentHashMap<Integer, Player> getPassedPlayers() {
 		return passedPlayers;
 	}
 

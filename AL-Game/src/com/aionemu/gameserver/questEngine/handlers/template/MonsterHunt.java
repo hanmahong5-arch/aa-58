@@ -33,20 +33,20 @@ import com.aionemu.gameserver.services.QuestService;
 import com.aionemu.gameserver.services.RiftService;
 import com.aionemu.gameserver.services.VortexService;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class MonsterHunt extends QuestHandler {
 	private final int questId;
 	private final Set<Integer> startNpcs = new HashSet<Integer>();
 	private final Set<Integer> endNpcs = new HashSet<Integer>();
-	private final FastMap<Monster, Set<Integer>> monsters;
+	private final ConcurrentHashMap<Monster, Set<Integer>> monsters;
 	private final int startDialog;
 	private final int endDialog;
 	private final Set<Integer> aggroNpcs = new HashSet<Integer>();
 	private final int invasionWorldId;
     private final boolean reward;
 
-	public MonsterHunt(int questId, List<Integer> startNpcIds, List<Integer> endNpcIds, FastMap<Monster, Set<Integer>> monsters, int startDialog, int endDialog, List<Integer> aggroNpcs, int invasionWorld, boolean reward) {
+	public MonsterHunt(int questId, List<Integer> startNpcIds, List<Integer> endNpcIds, ConcurrentHashMap<Monster, Set<Integer>> monsters, int startDialog, int endDialog, List<Integer> aggroNpcs, int invasionWorld, boolean reward) {
 		super(questId);
 		this.questId = questId;
 		this.startNpcs.addAll(startNpcIds);

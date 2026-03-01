@@ -32,8 +32,6 @@ public abstract class HousesDAO implements IDFactoryAwareDAO {
 		return HousesDAO.class.getName();
 	}
 
-	public abstract boolean supports(String databaseName, int majorVersion, int minorVersion);
-
 	public abstract boolean isIdUsed(int houseObjectId);
 
 	public abstract void storeHouse(House house);

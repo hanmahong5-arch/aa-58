@@ -30,7 +30,7 @@ import com.aionemu.gameserver.network.aion.serverpackets.SM_MAIL_SERVICE;
 import com.aionemu.gameserver.services.mail.MailService;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author kosyachok
@@ -38,8 +38,8 @@ import javolution.util.FastMap;
  */
 public class Mailbox {
 
-	private Map<Integer, Letter> mails = new FastMap<Integer, Letter>().shared();
-	private Map<Integer, Letter> reserveMail = new FastMap<Integer, Letter>().shared();
+	private Map<Integer, Letter> mails = new ConcurrentHashMap<Integer, Letter>();
+	private Map<Integer, Letter> reserveMail = new ConcurrentHashMap<Integer, Letter>();
 	private Player owner;
 	public boolean isMailListUpdateRequired;
 

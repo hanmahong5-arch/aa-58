@@ -38,7 +38,7 @@ import com.aionemu.gameserver.world.zone.InvasionZoneInstance;
 import com.aionemu.gameserver.world.zone.ZoneInstance;
 import com.aionemu.gameserver.world.zone.handler.ZoneHandler;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class VortexLocation implements ZoneHandler {
 	protected boolean isActive;
@@ -49,8 +49,8 @@ public class VortexLocation implements ZoneHandler {
 	protected Race offenceRace;
 	protected Race defendsRace;
 	protected List<InvasionZoneInstance> zones;
-	protected FastMap<Integer, Player> players = new FastMap<Integer, Player>();
-	protected FastMap<Integer, Kisk> kisks = new FastMap<Integer, Kisk>();
+	protected ConcurrentHashMap<Integer, Player> players = new ConcurrentHashMap<Integer, Player>();
+	protected ConcurrentHashMap<Integer, Kisk> kisks = new ConcurrentHashMap<Integer, Kisk>();
 	private final List<VisibleObject> spawned = new ArrayList<VisibleObject>();
 	protected HomePoint home;
 	protected ResurrectionPoint resurrection;
@@ -131,11 +131,11 @@ public class VortexLocation implements ZoneHandler {
 		return spawned;
 	}
 
-	public FastMap<Integer, Player> getPlayers() {
+	public ConcurrentHashMap<Integer, Player> getPlayers() {
 		return players;
 	}
 
-	public FastMap<Integer, Kisk> getInvadersKisks() {
+	public ConcurrentHashMap<Integer, Kisk> getInvadersKisks() {
 		return kisks;
 	}
 
@@ -172,12 +172,12 @@ public class VortexLocation implements ZoneHandler {
 	public void onEnterZone(Creature creature, ZoneInstance zone) {
 		if (creature instanceof Kisk) {
 			if (creature.getRace().equals(getInvadersRace())) {
-				kisks.putEntry(creature.getObjectId(), (Kisk) creature);
+				kisks.put(creature.getObjectId(), (Kisk) creature);
 			}
 		} else if (creature instanceof Player) {
 			Player player = (Player) creature;
 			if (!players.containsKey(player.getObjectId())) {
-				players.putEntry(player.getObjectId(), player);
+				players.put(player.getObjectId(), player);
 				if (isActive()) {
 					if (player.getRace().equals(getInvadersRace())) {
 						if (getVortexController().getPassedPlayers().containsKey(player.getObjectId())

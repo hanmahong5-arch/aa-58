@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import com.aionemu.gameserver.model.legiondominion.LegionDominionLocation;
 import com.aionemu.gameserver.model.templates.legiondominion.LegionDominionTemplate;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Rinzler (Encom)
@@ -41,7 +41,7 @@ public class LegionDominionData {
 	private List<LegionDominionTemplate> legionDominionTemplates;
 
 	@XmlTransient
-	private FastMap<Integer, LegionDominionLocation> legionDominion = new FastMap<Integer, LegionDominionLocation>();
+	private ConcurrentHashMap<Integer, LegionDominionLocation> legionDominion = new ConcurrentHashMap<Integer, LegionDominionLocation>();
 
 	void afterUnmarshal(Unmarshaller u, Object parent) {
 		for (LegionDominionTemplate template : legionDominionTemplates) {
@@ -53,7 +53,7 @@ public class LegionDominionData {
 		return legionDominion.size();
 	}
 
-	public FastMap<Integer, LegionDominionLocation> getLegionDominionLocations() {
+	public ConcurrentHashMap<Integer, LegionDominionLocation> getLegionDominionLocations() {
 		return legionDominion;
 	}
 }

@@ -18,6 +18,7 @@ package com.aionemu.gameserver.model.siege;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +31,7 @@ import com.aionemu.gameserver.world.zone.SiegeZoneInstance;
 import com.aionemu.gameserver.world.zone.ZoneInstance;
 import com.aionemu.gameserver.world.zone.handler.ZoneHandler;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SiegeLocation implements ZoneHandler {
 	private static final Logger log = LoggerFactory.getLogger(SiegeLocation.class);
@@ -52,8 +53,8 @@ public class SiegeLocation implements ZoneHandler {
 	private boolean canTeleport;
 	protected int siegeDuration;
 	protected int influenceValue;
-	private FastMap<Integer, Creature> creatures = new FastMap<Integer, Creature>();
-	private FastMap<Integer, Player> players = new FastMap<Integer, Player>();
+	private ConcurrentHashMap<Integer, Creature> creatures = new ConcurrentHashMap<Integer, Creature>();
+	private ConcurrentHashMap<Integer, Player> players = new ConcurrentHashMap<Integer, Player>();
 	protected int buffId;
 	protected int buffIdA;
 	protected int buffIdE;
@@ -208,8 +209,7 @@ public class SiegeLocation implements ZoneHandler {
 
 	public void doOnAllPlayers(Visitor<Player> visitor) {
 		try {
-			for (FastMap.Entry<Integer, Player> e = players.head(),
-					mapEnd = players.tail(); (e = e.getNext()) != mapEnd;) {
+			for (Map.Entry<Integer, Player> e : players.entrySet()) {
 				Player player = e.getValue();
 				if (player != null) {
 					visitor.visit(player);
@@ -220,11 +220,11 @@ public class SiegeLocation implements ZoneHandler {
 		}
 	}
 
-	public FastMap<Integer, Creature> getCreatures() {
+	public ConcurrentHashMap<Integer, Creature> getCreatures() {
 		return creatures;
 	}
 
-	public FastMap<Integer, Player> getPlayers() {
+	public ConcurrentHashMap<Integer, Player> getPlayers() {
 		return players;
 	}
 

@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +30,7 @@ public class ScriptService {
      * 存储文件到脚本管理器的映射关系
      * Stores the mapping between files and script managers
      */
-    private final Map<File, ScriptManager> map = new FastMap<File, ScriptManager>().shared();
+    private final Map<File, ScriptManager> map = new ConcurrentHashMap<File, ScriptManager>();
 
     /**
      * 通过文件路径加载脚本

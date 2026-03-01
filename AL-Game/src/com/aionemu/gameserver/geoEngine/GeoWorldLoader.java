@@ -19,7 +19,6 @@ package com.aionemu.gameserver.geoEngine;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -49,9 +48,6 @@ import com.aionemu.gameserver.geoEngine.scene.mesh.DoorGeometry;
 import com.aionemu.gameserver.model.templates.materials.MaterialTemplate;
 import com.aionemu.gameserver.world.zone.ZoneName;
 import com.aionemu.gameserver.world.zone.ZoneService;
-
-import sun.misc.Cleaner;
-import sun.nio.ch.DirectBuffer;
 
 /**
  * @author Mr. Poke
@@ -148,7 +144,6 @@ public class GeoWorldLoader {
 				geoms.put(name, node);
 			}
 		}
-		destroyDirectByteBuffer(geo);
 		return geoms;
 
 	}
@@ -252,7 +247,6 @@ public class GeoWorldLoader {
 				System.out.println(t);
 			}
 		}
-		destroyDirectByteBuffer(geo);
 		map.updateModelBound();
 		return true;
 	}
@@ -316,10 +310,4 @@ public class GeoWorldLoader {
 		return (int) ((xIntBits * 73856093 ^ yIntBits * 19349663 ^ zIntBits * 83492791) % 50000);
 	}
 
-	private static void destroyDirectByteBuffer(Buffer toBeDestroyed) {
-		Cleaner cleaner = ((DirectBuffer) toBeDestroyed).cleaner();
-		if (cleaner != null) {
-			cleaner.clean();
-		}
-	}
 }

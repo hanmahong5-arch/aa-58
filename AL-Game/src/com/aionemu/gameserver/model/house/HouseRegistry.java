@@ -26,37 +26,37 @@ import com.aionemu.gameserver.model.gameobjects.HouseObject;
 import com.aionemu.gameserver.model.gameobjects.PersistentState;
 import com.aionemu.gameserver.model.templates.housing.PartType;
 
-import javolution.util.FastList;
-import javolution.util.FastMap;
+import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class HouseRegistry {
 	private static final Logger log = LoggerFactory.getLogger(HouseRegistry.class);
 	private House owner;
-	private FastMap<Integer, HouseObject<?>> objects;
-	private FastMap<Integer, HouseDecoration> customParts;
+	private ConcurrentHashMap<Integer, HouseObject<?>> objects;
+	private ConcurrentHashMap<Integer, HouseDecoration> customParts;
 	private HouseDecoration[] defaultParts = new HouseDecoration[28];
 	private PersistentState persistentState = PersistentState.UPDATED;
 
 	public HouseRegistry(House owner) {
 		this.owner = owner;
-		this.objects = FastMap.newInstance();
-		this.customParts = FastMap.newInstance();
+		this.objects = new ConcurrentHashMap<>();
+		this.customParts = new ConcurrentHashMap<>();
 	}
 
 	public House getOwner() {
 		return owner;
 	}
 
-	public FastList<HouseObject<?>> getObjects() {
-		FastList<HouseObject<?>> temp = FastList.newInstance();
+	public ArrayList<HouseObject<?>> getObjects() {
+		ArrayList<HouseObject<?>> temp = new ArrayList<>();
 		for (HouseObject<?> obj : objects.values()) {
 			temp.add(obj);
 		}
 		return temp;
 	}
 
-	public FastList<HouseObject<?>> getSpawnedObjects() {
-		FastList<HouseObject<?>> temp = FastList.newInstance();
+	public ArrayList<HouseObject<?>> getSpawnedObjects() {
+		ArrayList<HouseObject<?>> temp = new ArrayList<>();
 		for (HouseObject<?> obj : objects.values()) {
 			if (obj.isSpawnedByPlayer() && obj.getPersistentState() != PersistentState.DELETED) {
 				temp.add(obj);
@@ -65,8 +65,8 @@ public class HouseRegistry {
 		return temp;
 	}
 
-	public FastList<HouseObject<?>> getNotSpawnedObjects() {
-		FastList<HouseObject<?>> temp = FastList.newInstance();
+	public ArrayList<HouseObject<?>> getNotSpawnedObjects() {
+		ArrayList<HouseObject<?>> temp = new ArrayList<>();
 		for (HouseObject<?> obj : objects.values()) {
 			if (!obj.isSpawnedByPlayer() && obj.getPersistentState() != PersistentState.DELETED) {
 				temp.add(obj);
@@ -106,8 +106,8 @@ public class HouseRegistry {
 		return oldObject;
 	}
 
-	public FastList<HouseDecoration> getCustomParts() {
-		FastList<HouseDecoration> temp = FastList.newInstance();
+	public ArrayList<HouseDecoration> getCustomParts() {
+		ArrayList<HouseDecoration> temp = new ArrayList<>();
 		for (HouseDecoration decor : customParts.values()) {
 			if (decor.getPersistentState() != PersistentState.DELETED && !decor.isUsed()) {
 				temp.add(decor);
@@ -174,8 +174,8 @@ public class HouseRegistry {
 		return obj;
 	}
 
-	public FastList<HouseDecoration> getDefaultParts() {
-		FastList<HouseDecoration> temp = FastList.newInstance();
+	public ArrayList<HouseDecoration> getDefaultParts() {
+		ArrayList<HouseDecoration> temp = new ArrayList<>();
 		for (HouseDecoration deco : defaultParts) {
 			if (deco != null) {
 				temp.add(deco);
@@ -193,8 +193,8 @@ public class HouseRegistry {
 		houseDeco.setPersistentState(PersistentState.NOACTION);
 	}
 
-	public FastList<HouseDecoration> getAllParts() {
-		FastList<HouseDecoration> temp = FastList.newInstance();
+	public ArrayList<HouseDecoration> getAllParts() {
+		ArrayList<HouseDecoration> temp = new ArrayList<>();
 		for (HouseDecoration deco : defaultParts) {
 			if (deco != null) {
 				temp.add(deco);

@@ -47,7 +47,7 @@ import com.aionemu.gameserver.utils.ThreadPoolManager;
 import com.aionemu.gameserver.world.World;
 import com.aionemu.gameserver.world.knownlist.Visitor;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Rinzler (Encom)
@@ -56,15 +56,15 @@ public class ZorshivDredgionService {
 	private DredgionSchedule dredgionSchedule;
 	private Map<Integer, ZorshivDredgionLocation> zorshivDredgion;
 	private static final int duration = CustomConfig.ZORSHIV_DREDGION_DURATION;
-	private final Map<Integer, ZorshivDredgion<?>> activeZorshivDredgion = new FastMap<Integer, ZorshivDredgion<?>>()
-			.shared();
+	private final Map<Integer, ZorshivDredgion<?>> activeZorshivDredgion = new ConcurrentHashMap<Integer, ZorshivDredgion<?>>()
+			;
 	private static final Logger log = LoggerFactory.getLogger(ZorshivDredgionService.class);
 
 	// Inggison Invasion
-	private FastMap<Integer, VisibleObject> adventPortal = new FastMap<Integer, VisibleObject>();
-	private FastMap<Integer, VisibleObject> adventEffect = new FastMap<Integer, VisibleObject>();
-	private FastMap<Integer, VisibleObject> adventControl = new FastMap<Integer, VisibleObject>();
-	private FastMap<Integer, VisibleObject> adventDirecting = new FastMap<Integer, VisibleObject>();
+	private ConcurrentHashMap<Integer, VisibleObject> adventPortal = new ConcurrentHashMap<Integer, VisibleObject>();
+	private ConcurrentHashMap<Integer, VisibleObject> adventEffect = new ConcurrentHashMap<Integer, VisibleObject>();
+	private ConcurrentHashMap<Integer, VisibleObject> adventControl = new ConcurrentHashMap<Integer, VisibleObject>();
+	private ConcurrentHashMap<Integer, VisibleObject> adventDirecting = new ConcurrentHashMap<Integer, VisibleObject>();
 
 	public void initZorshivDredgionLocations() {
 		if (CustomConfig.ZORSHIV_DREDGION_ENABLED) {

@@ -45,7 +45,7 @@ import com.aionemu.gameserver.services.player.PlayerLeaveWorldService;
 import com.aionemu.gameserver.utils.ThreadPoolManager;
 import com.google.common.base.Preconditions;
 
-import javolution.util.FastList;
+import java.util.ArrayList;
 
 /**
  * Object representing connection between GameServer and Aion Client.
@@ -85,7 +85,7 @@ public class AionConnection extends AConnection {
 	/**
 	 * Server Packet "to send" Queue
 	 */
-	private final FastList<AionServerPacket> sendMsgQueue = new FastList<AionServerPacket>();
+	private final ArrayList<AionServerPacket> sendMsgQueue = new ArrayList<AionServerPacket>();
 
 	/**
 	 * Current state of this connection

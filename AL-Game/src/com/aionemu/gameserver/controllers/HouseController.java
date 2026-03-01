@@ -40,10 +40,10 @@ import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.utils.ThreadPoolManager;
 import com.aionemu.gameserver.world.World;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class HouseController extends VisibleObjectController<House> {
-	FastMap<Integer, ActionObserver> observed = new FastMap<Integer, ActionObserver>().shared();
+	ConcurrentHashMap<Integer, ActionObserver> observed = new ConcurrentHashMap<Integer, ActionObserver>();
 
 	@Override
 	public void see(VisibleObject object) {

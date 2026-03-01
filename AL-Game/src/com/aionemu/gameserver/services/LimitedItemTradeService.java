@@ -28,14 +28,14 @@ import com.aionemu.gameserver.model.limiteditems.LimitedTradeNpc;
 import com.aionemu.gameserver.model.templates.goods.GoodsList;
 import com.aionemu.gameserver.model.templates.tradelist.TradeListTemplate.TradeTab;
 
-import javolution.util.FastList;
-import javolution.util.FastMap;
+import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class LimitedItemTradeService {
 	private static final Logger log = LoggerFactory.getLogger(LimitedItemTradeService.class);
 	private GoodsListData goodsListData = DataManager.GOODSLIST_DATA;
 	private TradeListData tradeListData = DataManager.TRADE_LIST_DATA;
-	private FastMap<Integer, LimitedTradeNpc> limitedTradeNpcs = new FastMap<Integer, LimitedTradeNpc>().shared();
+	private ConcurrentHashMap<Integer, LimitedTradeNpc> limitedTradeNpcs = new ConcurrentHashMap<Integer, LimitedTradeNpc>();
 
 	public void start() {
 		for (int npcId : tradeListData.getTradeListTemplate().keys()) {
@@ -44,7 +44,7 @@ public class LimitedItemTradeService {
 				if (goodsList == null) {
 					continue;
 				}
-				FastList<LimitedItem> limitedItems = goodsList.getLimitedItems();
+				ArrayList<LimitedItem> limitedItems = goodsList.getLimitedItems();
 				if (limitedItems.isEmpty()) {
 					continue;
 				}

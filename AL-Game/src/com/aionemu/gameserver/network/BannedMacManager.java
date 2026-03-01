@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 import com.aionemu.gameserver.network.loginserver.LoginServer;
 import com.aionemu.gameserver.network.loginserver.serverpackets.SM_MACBAN_CONTROL;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author KID
@@ -38,7 +38,7 @@ public class BannedMacManager {
 		return manager;
 	}
 
-	private Map<String, BannedMacEntry> bannedList = new FastMap<String, BannedMacEntry>();
+	private Map<String, BannedMacEntry> bannedList = new ConcurrentHashMap<String, BannedMacEntry>();
 
 	public final void banAddress(String address, long newTime, String details) {
 		BannedMacEntry entry;

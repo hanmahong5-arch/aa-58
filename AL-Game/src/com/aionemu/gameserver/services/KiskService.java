@@ -26,12 +26,12 @@ import com.aionemu.gameserver.network.aion.serverpackets.SM_SYSTEM_MESSAGE;
 import com.aionemu.gameserver.services.teleport.TeleportService2;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class KiskService {
 	private static final KiskService instance = new KiskService();
-	private final Map<Integer, Kisk> boundButOfflinePlayer = new FastMap<Integer, Kisk>().shared();
-	private final Map<Integer, Kisk> ownerPlayer = new FastMap<Integer, Kisk>().shared();
+	private final Map<Integer, Kisk> boundButOfflinePlayer = new ConcurrentHashMap<Integer, Kisk>();
+	private final Map<Integer, Kisk> ownerPlayer = new ConcurrentHashMap<Integer, Kisk>();
 
 	public void removeKisk(Kisk kisk) {
 		for (int memberId : kisk.getCurrentMemberIds()) {

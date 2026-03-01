@@ -1,30 +1,24 @@
 @ECHO off
-TITLE Aion 5.8 - Login Emu Console
-@COLOR 1A
-SET PATH="..\JavaJDK_8\bin"
+:: Run in Windows Terminal if available
+IF "%WT_SESSION%" == "" wt %0 2>nul && EXIT
+TITLE Encom 5.8 - Login Server
 
 :START
 CLS
-echo.
+JAVA -Xms64m -Xmx256m -XX:+UseNUMA -XX:+UseCompactObjectHeaders ^
+  --add-opens java.base/java.lang=ALL-UNNAMED ^
+  -cp "libs/*" com.aionemu.loginserver.LoginServer
+IF %ERRORLEVEL% EQU 0 GOTO END
+IF %ERRORLEVEL% EQU 2 GOTO START
+ECHO.
+ECHO Login server has terminated abnormally!
+ECHO.
+PAUSE >nul
+EXIT
 
-echo Starting Aion 5.8 - Login Emu.
-echo.
-REM -------------------------------------
-REM Default parameters for a basic server.
-java -Xms64m -Xmx256m -server -cp ./libs/*;AL-Login.jar com.aionemu.loginserver.LoginServer
-REM
-REM -------------------------------------
-
-SET CLASSPATH=%OLDCLASSPATH%
-
-if ERRORLEVEL 1 goto error
-goto end
-:error
-echo.
-echo Login Server Terminated Abnormaly, Please Verify Your Files.
-echo.
-:end
-echo.
-echo Login Server Terminated.
-echo.
-pause
+:END
+ECHO.
+ECHO Login server has shut down
+ECHO.
+PAUSE >nul
+EXIT

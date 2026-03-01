@@ -391,8 +391,6 @@ public final class NavService {
 		ray.setLimit(5F);
 		CollisionResults results = new CollisionResults((byte) 1, false, 0); //Instance ID shouldn't be needed
 		int collisionCount = navMap.collideWith(ray, results);
-		Vector3f.recycle(pos);
-		Vector3f.recycle(dir);
 		if (collisionCount == 0) return null;
 		Spatial ret = results.getClosestCollision().getGeometry();
 		assert ret instanceof NavGeometry;
@@ -414,9 +412,6 @@ public final class NavService {
 		box.setCenter(center);
 		CollisionResults results = new CollisionResults((byte) 1, false, 0); //Instance ID shouldn't be needed
 		int collisionCount = navMap.collideWith(box, results);
-		Vector3f.recycle(min);
-		Vector3f.recycle(max);
-		Vector3f.recycle(center);
 		if (collisionCount == 0) return null;
 		Spatial ret = results.getClosestCollision().getGeometry();
 		assert ret instanceof NavGeometry;

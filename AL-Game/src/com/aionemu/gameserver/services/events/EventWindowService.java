@@ -36,7 +36,7 @@ import com.aionemu.gameserver.services.item.ItemService;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.utils.ThreadPoolManager;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Rinzler (Encom)
@@ -48,7 +48,7 @@ public class EventWindowService {
 	private Map<Integer, EventsWindow> allEvents = DataManager.EVENTS_WINDOW.getAllEvents();
 	private HashMap<Integer, EventsWindow> activeEvents = new HashMap<Integer, EventsWindow>();
 	private HashMap<Integer, EventsWindow> activeEventsForPlayer = new HashMap<Integer, EventsWindow>();
-	private final FastMap<Integer, EventsWindow> sendActiveEventsForPlayer = new FastMap<>();
+	private final ConcurrentHashMap<Integer, EventsWindow> sendActiveEventsForPlayer = new ConcurrentHashMap<>();
 	private long tStart = 0; // Start Time.
 	private long tEnd = 0; // End Time.
 

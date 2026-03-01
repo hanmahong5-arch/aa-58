@@ -19,6 +19,7 @@ package com.aionemu.gameserver.services.veteranreward;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.HashSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +51,6 @@ import com.aionemu.gameserver.utils.Util;
 import com.aionemu.gameserver.utils.idfactory.IDFactory;
 import com.aionemu.gameserver.world.World;
 
-import javolution.util.FastSet;
 
 public class VeteranRewardsService {
 
@@ -100,7 +100,7 @@ public class VeteranRewardsService {
 			veteran_rewards.clear();
 		}
 
-		veteran_rewards = new FastSet<VeteranRewards>(getDAO().getVeteranReward()).shared();
+		veteran_rewards = new HashSet<>(getDAO().getVeteranReward());
 
 		if (veteran_rewards.size() > 0) {
 			if (VeteranRewardConfig.VETERANREWARDS_ENABLED_INFO_LOG) {

@@ -86,4 +86,12 @@ public interface InstanceHandler {
 	boolean onPassFlyingRing(Player player, String flyingRing);
 
 	void handleUseItemFinish(Player player, Npc npcId);
+
+	/**
+	 * AP reward multiplier for this instance. Default 1.0 (no modification).
+	 * Override in specific instance handlers to scale AP rewards.
+	 */
+	default float getApMultiplier() {
+		return 1.0f;
+	}
 }

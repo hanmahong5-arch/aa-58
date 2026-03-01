@@ -24,7 +24,7 @@ import com.aionemu.commons.database.dao.DAOManager;
 import com.aionemu.gameserver.dao.PlayerPetsDAO;
 import com.aionemu.gameserver.taskmanager.tasks.ExpireTimerTask;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author ATracer
@@ -34,7 +34,7 @@ public class PetList {
 	private final Player player;
 	private int lastUsedPetId;
 
-	private FastMap<Integer, PetCommonData> pets = new FastMap<Integer, PetCommonData>();
+	private ConcurrentHashMap<Integer, PetCommonData> pets = new ConcurrentHashMap<Integer, PetCommonData>();
 
 	PetList(Player player) {
 		this.player = player;

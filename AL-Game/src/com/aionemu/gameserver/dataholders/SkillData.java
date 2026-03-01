@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.aionemu.gameserver.skillengine.model.SkillTemplate;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 @XmlRootElement(name = "skill_data")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -43,7 +43,7 @@ public class SkillData {
 
 	private TIntObjectHashMap<SkillTemplate> skillData = new TIntObjectHashMap<SkillTemplate>();
 
-	private final Map<String, SkillTemplate> skillGroup = new FastMap<String, SkillTemplate>().shared();
+	private final Map<String, SkillTemplate> skillGroup = new ConcurrentHashMap<String, SkillTemplate>();
 
 	void afterUnmarshal(Unmarshaller u, Object parent) {
 		skillData.clear();

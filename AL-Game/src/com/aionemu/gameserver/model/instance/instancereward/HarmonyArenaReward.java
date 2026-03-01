@@ -16,12 +16,9 @@
  */
 package com.aionemu.gameserver.model.instance.instancereward;
 
-import static ch.lambdaj.Lambda.on;
-import static ch.lambdaj.Lambda.sort;
-import static ch.lambdaj.Lambda.sum;
-
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.aionemu.gameserver.model.autogroup.AGPlayer;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
@@ -32,10 +29,10 @@ import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.world.WorldMapInstance;
 import com.aionemu.gameserver.world.knownlist.Visitor;
 
-import javolution.util.FastList;
+import java.util.ArrayList;
 
 public class HarmonyArenaReward extends PvPArenaReward {
-	private FastList<HarmonyGroupReward> groups = new FastList<HarmonyGroupReward>();
+	private ArrayList<HarmonyGroupReward> groups = new ArrayList<HarmonyGroupReward>();
 
 	public HarmonyArenaReward(Integer mapId, int instanceId, WorldMapInstance instance) {
 		super(mapId, instanceId, instance);
@@ -51,8 +48,8 @@ public class HarmonyArenaReward extends PvPArenaReward {
 		return null;
 	}
 
-	public FastList<HarmonyGroupReward> getHarmonyGroupInside() {
-		FastList<HarmonyGroupReward> harmonyGroups = new FastList<HarmonyGroupReward>();
+	public ArrayList<HarmonyGroupReward> getHarmonyGroupInside() {
+		ArrayList<HarmonyGroupReward> harmonyGroups = new ArrayList<HarmonyGroupReward>();
 		for (HarmonyGroupReward group : groups) {
 			for (AGPlayer agp : group.getAGPlayers()) {
 				if (agp.isInInstance()) {
@@ -64,8 +61,8 @@ public class HarmonyArenaReward extends PvPArenaReward {
 		return harmonyGroups;
 	}
 
-	public FastList<Player> getPlayersInside(HarmonyGroupReward group) {
-		FastList<Player> players = new FastList<Player>();
+	public ArrayList<Player> getPlayersInside(HarmonyGroupReward group) {
+		ArrayList<Player> players = new ArrayList<Player>();
 		for (Player playerInside : instance.getPlayersInside()) {
 			if (group.containPlayer(playerInside.getObjectId())) {
 				players.add(playerInside);
@@ -78,7 +75,7 @@ public class HarmonyArenaReward extends PvPArenaReward {
 		groups.add(reward);
 	}
 
-	public FastList<HarmonyGroupReward> getGroups() {
+	public ArrayList<HarmonyGroupReward> getGroups() {
 		return groups;
 	}
 
@@ -104,17 +101,14 @@ public class HarmonyArenaReward extends PvPArenaReward {
 	}
 
 	public List<HarmonyGroupReward> sortGroupPoints() {
-		return sort(groups, on(HarmonyGroupReward.class).getPoints(), new Comparator<Integer>() {
-			@Override
-			public int compare(Integer o1, Integer o2) {
-				return o2 != null ? o2.compareTo(o1) : -o1.compareTo(o2);
-			}
-		});
+		return groups.stream()
+				.sorted(Comparator.comparingInt(HarmonyGroupReward::getPoints).reversed())
+				.collect(Collectors.toList());
 	}
 
 	@Override
 	public int getTotalPoints() {
-		return sum(groups, on(HarmonyGroupReward.class).getPoints());
+		return groups.stream().mapToInt(HarmonyGroupReward::getPoints).sum();
 	}
 
 	@Override

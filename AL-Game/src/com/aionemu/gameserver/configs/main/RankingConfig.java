@@ -30,4 +30,10 @@ public class RankingConfig {
 
 	@Property(key = "gameserver.top.ranking.max.offline.days", defaultValue = "0")
 	public static int TOP_RANKING_MAX_OFFLINE_DAYS;
+
+	@Property(key = "gameserver.top.ranking.daily.gp.loss.time", defaultValue = "0 0 0 ? * *")
+	public static String TOP_RANKING_DAILY_GP_LOSS_TIME;
+
+	@Property(key = "gameserver.top.ranking.daily.gp.loss.enable", defaultValue = "true")
+	public static boolean TOP_RANKING_DAILY_GP_LOSS_ENABLE;
 }

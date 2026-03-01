@@ -128,9 +128,8 @@ import com.aionemu.gameserver.world.geo.GeoService;
 import com.aionemu.gameserver.world.knownlist.Visitor;
 import com.aionemu.gameserver.world.zone.ZoneInstance;
 import com.aionemu.gameserver.world.zone.ZoneName;
-import com.sun.istack.internal.NotNull;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This class is for controlling players.
@@ -146,7 +145,7 @@ public class PlayerController extends CreatureController<Player> {
 	private long lastAttackMilis = 0;
 	private long lastAttackedMilis = 0;
 	private int stance = 0;
-	private FastMap<Integer, VisibleObject> autoPortals = new FastMap<Integer, VisibleObject>();
+	private ConcurrentHashMap<Integer, VisibleObject> autoPortals = new ConcurrentHashMap<Integer, VisibleObject>();
 
 	@Override
 	public void see(VisibleObject object) {
@@ -687,7 +686,7 @@ public class PlayerController extends CreatureController<Player> {
 		sendDieFromCreature(getOwner(), true);
 	}
 
-	private void sendDieFromCreature(@NotNull Creature lastAttacker, boolean showPacket) {
+	private void sendDieFromCreature(Creature lastAttacker, boolean showPacket) {
 		Player player = this.getOwner();
 		PacketSendUtility.broadcastPacket(player, new SM_EMOTION(player, EmotionType.DIE, 0,
 				player.equals(lastAttacker) ? 0 : lastAttacker.getObjectId()), true);

@@ -29,7 +29,7 @@ import com.aionemu.gameserver.skillengine.model.SkillTemplate;
 import com.aionemu.gameserver.taskmanager.tasks.ExpireTimerTask;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Rinzler (Encom)
@@ -37,11 +37,11 @@ import javolution.util.FastMap;
  */
 public class SkillSkinList {
 
-	private final FastMap<Integer, SkillSkin> skillskins;
+	private final ConcurrentHashMap<Integer, SkillSkin> skillskins;
 	private Player owner;
 
 	public SkillSkinList() {
-		skillskins = new FastMap<Integer, SkillSkin>();
+		skillskins = new ConcurrentHashMap<Integer, SkillSkin>();
 		owner = null;
 	}
 

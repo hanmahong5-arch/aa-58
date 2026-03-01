@@ -36,6 +36,8 @@ import com.aionemu.gameserver.utils.collections.LastUsedCache;
 import com.aionemu.gameserver.world.World;
 import com.aionemu.gameserver.world.geo.GeoService;
 import com.aionemu.gameserver.world.geo.nav.NavService;
+import com.aionemu.gameserver.world.geo.nav.RecastNavService;
+import com.aionemu.gameserver.world.geo.nav.SlicedPathRequest;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,6 +64,7 @@ public class NpcMoveController
     private boolean cachedPathValid;
     private float[][] cachedPath;
     private FollowMotor _followMotor;
+    private SlicedPathRequest pendingPath;
 
     public NpcMoveController(Npc owner) {
         super(owner);
@@ -190,20 +193,18 @@ public class NpcMoveController
                         cachedPathValid = false;
                     }
                     if (!cachedPathValid || cachedPath == null) {
-                        cachedPath = NavService.getInstance().navigateToTarget(owner, (Creature) target);
-                        if (cachedPath != null) { //Add a bit of randomness to the last point to prevent entities from stacking directly ontop of eachother.
-                            //TODO: Move to NavService and make sure this random point is on the navmesh!
-                            if (cachedPath.length != 1) {
-                                if (Rnd.nextBoolean()) {
-                                    cachedPath[cachedPath.length - 1][0] += Rnd.nextDouble() * owner.getObjectTemplate().getBoundRadius().getSide();
-                                } else {
-                                    cachedPath[cachedPath.length - 1][0] -= Rnd.nextDouble() * owner.getObjectTemplate().getBoundRadius().getSide();
-                                }
-                                if (Rnd.nextBoolean()) {
-                                    cachedPath[cachedPath.length - 1][1] += Rnd.nextDouble() * owner.getObjectTemplate().getBoundRadius().getSide();
-                                } else {
-                                    cachedPath[cachedPath.length - 1][1] -= Rnd.nextDouble() * owner.getObjectTemplate().getBoundRadius().getSide();
-                                }
+                        cachedPath = computePath((Creature) target);
+                        if (cachedPath != null && cachedPath.length > 1) {
+                            // add randomness to last point to prevent stacking
+                            if (Rnd.nextBoolean()) {
+                                cachedPath[cachedPath.length - 1][0] += Rnd.nextDouble() * owner.getObjectTemplate().getBoundRadius().getSide();
+                            } else {
+                                cachedPath[cachedPath.length - 1][0] -= Rnd.nextDouble() * owner.getObjectTemplate().getBoundRadius().getSide();
+                            }
+                            if (Rnd.nextBoolean()) {
+                                cachedPath[cachedPath.length - 1][1] += Rnd.nextDouble() * owner.getObjectTemplate().getBoundRadius().getSide();
+                            } else {
+                                cachedPath[cachedPath.length - 1][1] -= Rnd.nextDouble() * owner.getObjectTemplate().getBoundRadius().getSide();
                             }
                         }
                         cachedPathValid = true;
@@ -243,7 +244,7 @@ public class NpcMoveController
             }
             case HOME: {
                 if ((!cachedPathValid || cachedPath == null) && (returnAttempts<3)) {
-                    cachedPath = NavService.getInstance().navigateToLocation(owner, pointX, pointY, pointZ);
+                    cachedPath = computePathToLocation(pointX, pointY, pointZ);
                     returnAttempts++;
                     cachedPathValid = true;
                 }
@@ -256,6 +257,31 @@ public class NpcMoveController
             }
         }
         this.updateLastMove();
+    }
+
+    /**
+     * Strategy routing: recast4j -> legacy NavService -> null (direct line)
+     */
+    private float[][] computePath(Creature target) {
+        if (GeoDataConfig.GEO_NAV_RECAST_ENABLE) {
+            float[][] path = RecastNavService.getInstance().navigateToTarget(owner, target);
+            if (path != null) return path;
+        }
+        if (GeoDataConfig.GEO_NAV_ENABLE) {
+            return NavService.getInstance().navigateToTarget(owner, target);
+        }
+        return null;
+    }
+
+    private float[][] computePathToLocation(float x, float y, float z) {
+        if (GeoDataConfig.GEO_NAV_RECAST_ENABLE) {
+            float[][] path = RecastNavService.getInstance().navigateToLocation(owner, x, y, z);
+            if (path != null) return path;
+        }
+        if (GeoDataConfig.GEO_NAV_ENABLE) {
+            return NavService.getInstance().navigateToLocation(owner, x, y, z);
+        }
+        return null;
     }
 
     private float getTargetZ(Npc npc, Creature creature) {

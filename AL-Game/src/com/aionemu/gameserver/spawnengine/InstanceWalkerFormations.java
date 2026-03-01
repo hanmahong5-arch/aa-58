@@ -16,20 +16,14 @@
  */
 package com.aionemu.gameserver.spawnengine;
 
-import static ch.lambdaj.Lambda.by;
-import static ch.lambdaj.Lambda.group;
-import static ch.lambdaj.Lambda.on;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import ch.lambdaj.group.Group;
 
 /**
  * @author Rolandas
@@ -66,13 +60,13 @@ public class InstanceWalkerFormations {
 	 */
 	protected void organizeAndSpawn() {
 		for (List<ClusteredNpc> candidates : groupedSpawnObjects.values()) {
-			Group<ClusteredNpc> bySize = group(candidates, by(on(ClusteredNpc.class).getPositionHash()));
-			Set<String> keys = bySize.keySet();
+			Map<Integer, List<ClusteredNpc>> bySize = candidates.stream()
+					.collect(Collectors.groupingBy(ClusteredNpc::getPositionHash));
 			int maxSize = 0;
 			List<ClusteredNpc> npcs = null;
-			for (String key : keys) {
-				if (bySize.find(key).size() > maxSize) {
-					npcs = bySize.find(key);
+			for (Map.Entry<Integer, List<ClusteredNpc>> entry : bySize.entrySet()) {
+				if (entry.getValue().size() > maxSize) {
+					npcs = entry.getValue();
 					maxSize = npcs.size();
 				}
 			}

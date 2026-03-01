@@ -47,7 +47,7 @@ import com.aionemu.gameserver.utils.ThreadPoolManager;
 import com.aionemu.gameserver.world.World;
 import com.aionemu.gameserver.world.knownlist.Visitor;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Wnkrz on 22/08/2017.
@@ -56,8 +56,8 @@ import javolution.util.FastMap;
 public class TowerOfEternityService {
 	private Map<Integer, TowerOfEternityLocation> towerOfEternity;
 	private static final int duration = CustomConfig.TOWER_OF_ETERNITY_DURATION;
-	private final Map<Integer, TowerOfEternity<?>> activeTowerOfEternity = new FastMap<Integer, TowerOfEternity<?>>()
-			.shared();
+	private final Map<Integer, TowerOfEternity<?>> activeTowerOfEternity = new ConcurrentHashMap<Integer, TowerOfEternity<?>>()
+			;
 	private static Logger log = LoggerFactory.getLogger(TowerOfEternityService.class);
 
 	public void initTowerOfEternityLocation() {

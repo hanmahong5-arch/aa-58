@@ -23,7 +23,7 @@ import java.util.Map;
 import com.aionemu.gameserver.model.gameobjects.Item;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 
-import javolution.util.FastList;
+import java.util.ArrayList;
 
 /**
  * @author ATracer
@@ -39,7 +39,7 @@ public class Exchange {
 	private long kinahCount;
 
 	private Map<Integer, ExchangeItem> items = new HashMap<Integer, ExchangeItem>();
-	private List<Item> itemsToUpdate = FastList.newInstance();
+	private List<Item> itemsToUpdate = new ArrayList<>();
 
 	public Exchange(Player activeplayer, Player targetPlayer) {
 		super();

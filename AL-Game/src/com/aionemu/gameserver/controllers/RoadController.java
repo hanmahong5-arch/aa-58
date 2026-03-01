@@ -21,14 +21,14 @@ import com.aionemu.gameserver.model.gameobjects.VisibleObject;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.road.Road;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author SheppeR
  */
 public class RoadController extends VisibleObjectController<Road> {
 
-	FastMap<Integer, RoadObserver> observed = new FastMap<Integer, RoadObserver>().shared();
+	ConcurrentHashMap<Integer, RoadObserver> observed = new ConcurrentHashMap<Integer, RoadObserver>();
 
 	@Override
 	public void see(VisibleObject object) {

@@ -35,21 +35,34 @@ import com.aionemu.gameserver.services.LegionService;
 import com.aionemu.gameserver.world.World;
 import com.aionemu.gameserver.world.knownlist.Visitor;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class AbyssRankingCache {
 	private static final Logger log = LoggerFactory.getLogger(AbyssRankingCache.class);
 	private int lastUpdate;
-	private final FastMap<Race, List<SM_ABYSS_RANKING_PLAYERS>> players = new FastMap<Race, List<SM_ABYSS_RANKING_PLAYERS>>();
-	private final FastMap<Race, SM_ABYSS_RANKING_LEGIONS> legions = new FastMap<Race, SM_ABYSS_RANKING_LEGIONS>();
+	private final ConcurrentHashMap<Race, List<SM_ABYSS_RANKING_PLAYERS>> players = new ConcurrentHashMap<Race, List<SM_ABYSS_RANKING_PLAYERS>>();
+	private final ConcurrentHashMap<Race, SM_ABYSS_RANKING_LEGIONS> legions = new ConcurrentHashMap<Race, SM_ABYSS_RANKING_LEGIONS>();
+	private final ReentrantReadWriteLock rwLock = new ReentrantReadWriteLock();
+	private volatile boolean isDirty = false;
+
+	public void markDirty() {
+		isDirty = true;
+	}
 
 	public void reloadRankings() {
-		log.info("Updating abyss ranking cache");
-		this.lastUpdate = (int) (System.currentTimeMillis() / 1000);
-		getDAO().updateRankList();
-		renewPlayerRanking(Race.ASMODIANS);
-		renewPlayerRanking(Race.ELYOS);
-		renewLegionRanking();
+		rwLock.writeLock().lock();
+		try {
+			log.info("Updating abyss ranking cache");
+			this.lastUpdate = (int) (System.currentTimeMillis() / 1000);
+			getDAO().updateRankList();
+			renewPlayerRanking(Race.ASMODIANS);
+			renewPlayerRanking(Race.ELYOS);
+			renewLegionRanking();
+			isDirty = false;
+		} finally {
+			rwLock.writeLock().unlock();
+		}
 		World.getInstance().doOnAllPlayers(new Visitor<Player>() {
 			@Override
 			public void visit(Player player) {
@@ -98,11 +111,21 @@ public class AbyssRankingCache {
 	}
 
 	public List<SM_ABYSS_RANKING_PLAYERS> getPlayers(Race race) {
-		return players.get(race);
+		rwLock.readLock().lock();
+		try {
+			return players.get(race);
+		} finally {
+			rwLock.readLock().unlock();
+		}
 	}
 
 	public SM_ABYSS_RANKING_LEGIONS getLegions(Race race) {
-		return legions.get(race);
+		rwLock.readLock().lock();
+		try {
+			return legions.get(race);
+		} finally {
+			rwLock.readLock().unlock();
+		}
 	}
 
 	public int getLastUpdate() {

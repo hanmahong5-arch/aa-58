@@ -21,6 +21,8 @@ public class ChainSkill {
 	private String category;
 	private int chainCount = 0;
 	private long useTime;
+	private int penaltySkillId = 0;
+	private int penaltySkillLevel = 1;
 
 	public ChainSkill(String category, int chainCount, long useTime) {
 		this.category = category;
@@ -60,5 +62,21 @@ public class ChainSkill {
 
 	public void setUseTime(long useTime) {
 		this.useTime = useTime;
+	}
+
+	public int getPenaltySkillId() {
+		return penaltySkillId;
+	}
+
+	public void setPenaltySkillId(int penaltySkillId) {
+		this.penaltySkillId = penaltySkillId;
+	}
+
+	public int getPenaltySkillLevel() {
+		return penaltySkillLevel;
+	}
+
+	public void setPenaltySkillLevel(int penaltySkillLevel) {
+		this.penaltySkillLevel = penaltySkillLevel;
 	}
 }

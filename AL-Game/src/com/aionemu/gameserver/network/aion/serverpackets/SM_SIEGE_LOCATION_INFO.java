@@ -31,7 +31,7 @@ import com.aionemu.gameserver.network.aion.AionServerPacket;
 import com.aionemu.gameserver.services.LegionService;
 import com.aionemu.gameserver.services.SiegeService;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SM_SIEGE_LOCATION_INFO extends AionServerPacket {
 	private int infoType;
@@ -45,7 +45,7 @@ public class SM_SIEGE_LOCATION_INFO extends AionServerPacket {
 
 	public SM_SIEGE_LOCATION_INFO(SiegeLocation loc) {
 		this.infoType = 1;
-		locations = new FastMap<Integer, SiegeLocation>();
+		locations = new ConcurrentHashMap<Integer, SiegeLocation>();
 		locations.put(loc.getLocationId(), loc);
 	}
 

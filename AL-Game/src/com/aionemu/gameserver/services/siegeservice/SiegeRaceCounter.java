@@ -32,12 +32,12 @@ import com.aionemu.gameserver.world.World;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SiegeRaceCounter implements Comparable<SiegeRaceCounter> {
 	private final AtomicLong totalDamage = new AtomicLong();
-	private final Map<Integer, AtomicLong> playerDamageCounter = new FastMap<Integer, AtomicLong>().shared();
-	private final Map<Integer, AtomicLong> playerAPCounter = new FastMap<Integer, AtomicLong>().shared();
+	private final Map<Integer, AtomicLong> playerDamageCounter = new ConcurrentHashMap<Integer, AtomicLong>();
+	private final Map<Integer, AtomicLong> playerAPCounter = new ConcurrentHashMap<Integer, AtomicLong>();
 	private final SiegeRace siegeRace;
 
 	public SiegeRaceCounter(SiegeRace siegeRace) {

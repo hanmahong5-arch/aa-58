@@ -279,11 +279,6 @@ public class NavGeometry extends Spatial {
 				Vector3f displacement = intersection.subtract(((Ray) other).getOrigin());
 				float distance = displacement.length();
 				if (distance > ((Ray) other).limit) {
-					Triangle.recycle(tri);
-					Vector3f.recycle(p1);
-					Vector3f.recycle(p2);
-					Vector3f.recycle(p3);
-					Vector3f.recycle(displacement);
 					return 0;
 				}
 				
@@ -293,18 +288,8 @@ public class NavGeometry extends Spatial {
 				res.setDistance(distance);
 				results.addCollision(res);
 				
-				Triangle.recycle(tri);
-				Vector3f.recycle(p1);
-				Vector3f.recycle(p2);
-				Vector3f.recycle(p3);
-				Vector3f.recycle(displacement);
 				return 1;
 			}
-			Triangle.recycle(tri);
-			Vector3f.recycle(p1);
-			Vector3f.recycle(p2);
-			Vector3f.recycle(p3);
-			Vector3f.recycle(intersection);
 			return 0;
 		} else if (other instanceof BoundingBox) {
 			if (worldBound.intersects((BoundingBox) other)) {
@@ -316,14 +301,8 @@ public class NavGeometry extends Spatial {
 					res.setGeometry(this);
 					res.setDistance(worldBound.getCenter().distance(((BoundingBox) other).getCenter()));
 					results.addCollision(res);
-					Vector3f.recycle(p1);
-					Vector3f.recycle(p2);
-					Vector3f.recycle(p3);
 					return 1;
 				}
-				Vector3f.recycle(p1);
-				Vector3f.recycle(p2);
-				Vector3f.recycle(p3);
 			}
 			return 0;
 		} else {

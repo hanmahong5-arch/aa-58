@@ -57,14 +57,14 @@ import com.aionemu.gameserver.world.WorldMapInstance;
 import com.aionemu.gameserver.world.WorldPosition;
 import com.aionemu.gameserver.world.knownlist.Visitor;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Rinzler (Encom)
  */
 public class FFAService {
 	private static final Logger log = LoggerFactory.getLogger(FFAService.class);
-	private Map<Integer, WorldPosition> previousLocations = new FastMap<Integer, WorldPosition>();
+	private Map<Integer, WorldPosition> previousLocations = new ConcurrentHashMap<Integer, WorldPosition>();
 	private WorldMapInstance activeInstance;
 	private List<ArenaMap> maps = new ArrayList<ArenaMap>();
 	private ArenaMap activeMap = null;

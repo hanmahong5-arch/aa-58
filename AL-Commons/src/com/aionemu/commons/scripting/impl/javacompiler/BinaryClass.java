@@ -25,16 +25,13 @@ package com.aionemu.commons.scripting.impl.javacompiler;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Writer;
 import java.net.URI;
 
-import com.sun.tools.javac.file.BaseFileObject;
-
-// import com.sun.tools.javac.file.BaseFileObject;
+import javax.tools.SimpleJavaFileObject;
 
 /**
  * 二进制类文件对象，用于处理编译后的类文件
@@ -55,7 +52,7 @@ import com.sun.tools.javac.file.BaseFileObject;
  *
  * @author SoulKeeper
  */
-public class BinaryClass extends BaseFileObject {
+public class BinaryClass extends SimpleJavaFileObject {
 	
 	/**
 	 * ClassName
@@ -78,7 +75,7 @@ public class BinaryClass extends BaseFileObject {
 	 * @param name class name
 	 */
 	protected BinaryClass(String name) {
-		super(null);
+		super(URI.create(name), Kind.CLASS);
 		this.name = name;
 	}
 	
@@ -89,16 +86,14 @@ public class BinaryClass extends BaseFileObject {
 	 */
 	@Override
 	public URI toUri() {
-		throw new UnsupportedOperationException();
+		return super.toUri();
 	}
 	
 	/**
 	 * Returns name of this class with ".class" suffix
 	 *
 	 * @return name of this class with ".class" suffix
-	 * @deprecated
 	 */
-	@Deprecated
 	@Override
 	public String getName() {
 		return name + ".class";
@@ -167,13 +162,13 @@ public class BinaryClass extends BaseFileObject {
 	}
 	
 	/**
-	 * Returns class name
+	 * Returns the binary name of this class.
+	 * Called by ClassFileManager.inferBinaryName().
 	 *
-	 * @param path doesn't matter
+	 * @param path doesn't matter, can be null
 	 * @return class name
 	 */
-	@Override
-	protected String inferBinaryName(Iterable<? extends File> path) {
+	public String inferBinaryName(Iterable<?> path) {
 		return name;
 	}
 	
@@ -226,31 +221,16 @@ public class BinaryClass extends BaseFileObject {
 		return Kind.CLASS;
 	}
 	
-	/*
-	 * I'm adding these in for the sake of updating the compiler. It avoids some compiler warning spam in the server console when running the server
-	 * with a higher version of Java. I'm not aware of how to implement them correctly, so for now I'll leave them broken. This class is a "hack"
-	 * anyway.
-	 * 
-	 * (non-Javadoc)
-	 * 
-	 * @see com.sun.tools.javac.file.BaseFileObject#equals(java.lang.Object)
-	 */
 	@Override
-	public boolean equals(Object arg0) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (!(obj instanceof BinaryClass)) return false;
+		return name.equals(((BinaryClass) obj).name);
 	}
-	
-	@Override
-	public String getShortName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
+
 	@Override
 	public int hashCode() {
-		// TODO Auto-generated method stub
-		return 0;
+		return name.hashCode();
 	}
 	
 }

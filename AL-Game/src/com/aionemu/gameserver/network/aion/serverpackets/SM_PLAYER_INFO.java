@@ -26,7 +26,7 @@ import com.aionemu.gameserver.services.events.bg.DeathmatchBg;
 import com.aionemu.gameserver.services.events.bg.SoloSurvivorBg;
 import com.aionemu.gameserver.model.account.Account;
 
-import javolution.util.FastList;
+import java.util.ArrayList;
 
 public class SM_PLAYER_INFO extends AionServerPacket {
 
@@ -226,7 +226,7 @@ public class SM_PLAYER_INFO extends AionServerPacket {
 		 */
 		int mask = 0;
 
-		FastList<Item> items = player.getEquipment().getEquippedForApparence();
+		ArrayList<Item> items = player.getEquipment().getEquippedForApparence();
 
 		for (Item item : items) {
 			if (item.getItemTemplate().isTwoHandWeapon()) {

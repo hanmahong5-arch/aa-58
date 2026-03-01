@@ -16,16 +16,12 @@
  */
 package com.aionemu.gameserver.model.team.legion;
 
-import static ch.lambdaj.Lambda.having;
-import static ch.lambdaj.Lambda.on;
-import static ch.lambdaj.Lambda.select;
-import static org.hamcrest.Matchers.equalTo;
-
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.Map.Entry;
 import java.util.SortedSet;
 import java.util.TreeMap;
@@ -37,7 +33,7 @@ import com.aionemu.gameserver.model.bonus_service.ServiceBuff;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.world.World;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Simple
@@ -62,7 +58,7 @@ public class Legion {
 	private LegionWarehouse legionWarehouse;
 	private SortedSet<LegionHistory> legionHistory;
 	private AtomicBoolean hasBonus = new AtomicBoolean(false);
-	private FastMap<Integer, LegionJoinRequest> joinRequestMap = new FastMap<Integer, LegionJoinRequest>();
+	private ConcurrentHashMap<Integer, LegionJoinRequest> joinRequestMap = new ConcurrentHashMap<Integer, LegionJoinRequest>();
 	private String description = "";
 	private int minJoinLevel = 0;
 	private int joinType = 0;
@@ -510,7 +506,7 @@ public class Legion {
 		if (legionHistory.isEmpty()) {
 			return legionHistory;
 		}
-		return select(legionHistory, having(on(LegionHistory.class).getTabId(), equalTo(tabType)));
+		return legionHistory.stream().filter(h -> h.getTabId() == tabType).collect(Collectors.toList());
 	}
 
 	/**
@@ -610,7 +606,7 @@ public class Legion {
 		this.joinType = joinType;
 	}
 
-	public FastMap<Integer, LegionJoinRequest> getJoinRequestMap() {
+	public ConcurrentHashMap<Integer, LegionJoinRequest> getJoinRequestMap() {
 		return joinRequestMap;
 	}
 

@@ -31,7 +31,7 @@ import com.aionemu.gameserver.services.AutoGroupService;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.world.World;
 
-import javolution.util.FastList;
+import java.util.ArrayList;
 
 /****/
 /**
@@ -41,7 +41,7 @@ import javolution.util.FastList;
 public class EngulfedOphidanBridgeService {
 	private static final Logger log = LoggerFactory.getLogger(EngulfedOphidanBridgeService.class);
 	private boolean registerAvailable;
-	private final FastList<Integer> playersWithCooldown = FastList.newInstance();
+	private final ArrayList<Integer> playersWithCooldown = new ArrayList<>();
 	public static final byte minLevel = 61, capLevel = 66;
 	public static final int maskId = 108;
 

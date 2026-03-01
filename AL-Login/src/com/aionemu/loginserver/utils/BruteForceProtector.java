@@ -18,7 +18,7 @@
 
 package com.aionemu.loginserver.utils;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.aionemu.loginserver.configs.Config;
 
@@ -28,7 +28,7 @@ import com.aionemu.loginserver.configs.Config;
  */
 public class BruteForceProtector {
 
-    private FastMap<String, FailedLoginInfo> failedConnections = new FastMap<String, FailedLoginInfo>();
+    private ConcurrentHashMap<String, FailedLoginInfo> failedConnections = new ConcurrentHashMap<String, FailedLoginInfo>();
 
     class FailedLoginInfo {
 

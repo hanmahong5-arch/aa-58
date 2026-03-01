@@ -35,11 +35,11 @@ import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.world.World;
 import com.aionemu.gameserver.world.WorldPosition;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class TerritoryService {
 	private TerritoryBuff territoryBuff;
-	private FastMap<Integer, TerritoryBuff> buffs = new FastMap<Integer, TerritoryBuff>();
+	private ConcurrentHashMap<Integer, TerritoryBuff> buffs = new ConcurrentHashMap<Integer, TerritoryBuff>();
 	private TreeMap<Integer, LegionTerritory> territories = new TreeMap<Integer, LegionTerritory>();
 	private TreeMap<Integer, TreeMap<Integer, WorldPosition>> teleporters = new TreeMap<Integer, TreeMap<Integer, WorldPosition>>();
 

@@ -37,7 +37,7 @@ import com.aionemu.gameserver.skillengine.effect.AbnormalState;
 import com.aionemu.gameserver.skillengine.model.Effect;
 import com.aionemu.gameserver.skillengine.model.Skill;
 
-import javolution.util.FastList;
+import java.util.ArrayList;
 
 /**
  * Notes:<br>
@@ -50,9 +50,9 @@ import javolution.util.FastList;
 public class ObserveController {
 
 	private ReentrantLock lock = new ReentrantLock();
-	protected Collection<ActionObserver> observers = new FastList<ActionObserver>(0).shared();
-	protected FastList<ActionObserver> onceUsedObservers = new FastList<ActionObserver>(0);
-	protected Collection<AttackCalcObserver> attackCalcObservers = new FastList<AttackCalcObserver>(0).shared();
+	protected Collection<ActionObserver> observers = new ArrayList<ActionObserver>(0);
+	protected ArrayList<ActionObserver> onceUsedObservers = new ArrayList<ActionObserver>(0);
+	protected Collection<AttackCalcObserver> attackCalcObservers = new ArrayList<AttackCalcObserver>(0);
 
 	/**
 	 * Once used observer add to observerController. If observer notify will be

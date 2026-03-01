@@ -28,7 +28,7 @@ import com.aionemu.gameserver.skillengine.SkillEngine;
 import com.aionemu.gameserver.utils.MathUtil;
 import com.aionemu.gameserver.world.knownlist.Visitor;
 
-import javolution.util.FastList;
+import java.util.ArrayList;
 
 /****/
 /**
@@ -37,7 +37,7 @@ import javolution.util.FastList;
 
 public class SpringZoneService {
 	Logger log = LoggerFactory.getLogger(SpringZoneService.class);
-	private FastList<SpringObject> springObjects = new FastList<SpringObject>();
+	private ArrayList<SpringObject> springObjects = new ArrayList<SpringObject>();
 
 	private SpringZoneService() {
 		for (SpringTemplate t : DataManager.SPRING_OBJECTS_DATA.getSpringObject()) {

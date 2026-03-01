@@ -20,7 +20,7 @@ import com.aionemu.gameserver.controllers.RVController;
 import com.aionemu.gameserver.network.aion.AionConnection;
 import com.aionemu.gameserver.network.aion.AionServerPacket;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Sweetkr
@@ -29,7 +29,7 @@ public class SM_RIFT_ANNOUNCE extends AionServerPacket {
 
 	private int actionId;
 	private RVController rift;
-	private FastMap<Integer, Integer> rifts;
+	private ConcurrentHashMap<Integer, Integer> rifts;
 	private int objectId;
 	private int gelkmaros, inggison;
 
@@ -38,7 +38,7 @@ public class SM_RIFT_ANNOUNCE extends AionServerPacket {
 	 *
 	 * @param player
 	 */
-	public SM_RIFT_ANNOUNCE(FastMap<Integer, Integer> rifts) {
+	public SM_RIFT_ANNOUNCE(ConcurrentHashMap<Integer, Integer> rifts) {
 		this.actionId = 0;
 		this.rifts = rifts;
 	}

@@ -31,12 +31,12 @@ import com.aionemu.gameserver.network.aion.serverpackets.SM_SYSTEM_MESSAGE;
 import com.aionemu.gameserver.services.teleport.TeleportService2;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Invasion extends DimensionalVortex<VortexLocation> {
 	PlayerAlliance invAlliance, defAlliance;
-	protected FastMap<Integer, Player> invaders = new FastMap<Integer, Player>();
-	protected FastMap<Integer, Player> defenders = new FastMap<Integer, Player>();
+	protected ConcurrentHashMap<Integer, Player> invaders = new ConcurrentHashMap<Integer, Player>();
+	protected ConcurrentHashMap<Integer, Player> defenders = new ConcurrentHashMap<Integer, Player>();
 
 	public Invasion(VortexLocation vortex) {
 		super(vortex);
@@ -69,7 +69,7 @@ public class Invasion extends DimensionalVortex<VortexLocation> {
 
 	@Override
 	public void addPlayer(Player player, boolean isInvader) {
-		FastMap<Integer, Player> list = isInvader ? invaders : defenders;
+		ConcurrentHashMap<Integer, Player> list = isInvader ? invaders : defenders;
 		PlayerAlliance alliance = isInvader ? invAlliance : defAlliance;
 		if (alliance != null && alliance.size() > 0) {
 			PlayerAllianceService.addPlayer(alliance, player);
@@ -93,12 +93,12 @@ public class Invasion extends DimensionalVortex<VortexLocation> {
 				kickPlayer(player, isInvader);
 			}
 		}
-		list.putEntry(player.getObjectId(), player);
+		list.put(player.getObjectId(), player);
 	}
 
 	@Override
 	public void kickPlayer(Player player, boolean isInvader) {
-		FastMap<Integer, Player> list = isInvader ? invaders : defenders;
+		ConcurrentHashMap<Integer, Player> list = isInvader ? invaders : defenders;
 		PlayerAlliance alliance = isInvader ? invAlliance : defAlliance;
 		list.remove(player.getObjectId());
 		if (alliance != null && alliance.hasMember(player.getObjectId())) {
@@ -174,12 +174,12 @@ public class Invasion extends DimensionalVortex<VortexLocation> {
 	}
 
 	@Override
-	public FastMap<Integer, Player> getInvaders() {
+	public ConcurrentHashMap<Integer, Player> getInvaders() {
 		return invaders;
 	}
 
 	@Override
-	public FastMap<Integer, Player> getDefenders() {
+	public ConcurrentHashMap<Integer, Player> getDefenders() {
 		return defenders;
 	}
 }

@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import com.aionemu.gameserver.model.rvr.RvrLocation;
 import com.aionemu.gameserver.model.templates.rvr.RvrTemplate;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Rinzler (Encom)
@@ -41,7 +41,7 @@ public class RvrData {
 	private List<RvrTemplate> rvrTemplates;
 
 	@XmlTransient
-	private FastMap<Integer, RvrLocation> rvr = new FastMap<Integer, RvrLocation>();
+	private ConcurrentHashMap<Integer, RvrLocation> rvr = new ConcurrentHashMap<Integer, RvrLocation>();
 
 	void afterUnmarshal(Unmarshaller u, Object parent) {
 		for (RvrTemplate template : rvrTemplates) {
@@ -53,7 +53,7 @@ public class RvrData {
 		return rvr.size();
 	}
 
-	public FastMap<Integer, RvrLocation> getRvrLocations() {
+	public ConcurrentHashMap<Integer, RvrLocation> getRvrLocations() {
 		return rvr;
 	}
 }

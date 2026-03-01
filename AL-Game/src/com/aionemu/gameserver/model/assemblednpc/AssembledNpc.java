@@ -16,7 +16,7 @@
  */
 package com.aionemu.gameserver.model.assemblednpc;
 
-import javolution.util.FastList;
+import java.util.ArrayList;
 
 /**
  *
@@ -24,18 +24,18 @@ import javolution.util.FastList;
  */
 public class AssembledNpc {
 
-	private FastList<AssembledNpcPart> assembledParts = new FastList<AssembledNpcPart>();
+	private ArrayList<AssembledNpcPart> assembledParts = new ArrayList<AssembledNpcPart>();
 	private long spawnTime = System.currentTimeMillis();
 	private int routeId;
 	private int mapId;
 
-	public AssembledNpc(int routeId, int mapId, int liveTime, FastList<AssembledNpcPart> assembledParts) {
+	public AssembledNpc(int routeId, int mapId, int liveTime, ArrayList<AssembledNpcPart> assembledParts) {
 		this.assembledParts = assembledParts;
 		this.routeId = routeId;
 		this.mapId = mapId;
 	}
 
-	public FastList<AssembledNpcPart> getAssembledParts() {
+	public ArrayList<AssembledNpcPart> getAssembledParts() {
 		return assembledParts;
 	}
 

@@ -24,7 +24,7 @@ import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.templates.idiandepths.IdianDepthsTemplate;
 import com.aionemu.gameserver.services.idiandepthsservice.IdianDepths;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Rinzler (Encom)
@@ -35,7 +35,7 @@ public class IdianDepthsLocation {
 	protected boolean isActive;
 	protected IdianDepthsTemplate template;
 	protected IdianDepths<IdianDepthsLocation> activeIdianDepths;
-	protected FastMap<Integer, Player> players = new FastMap<Integer, Player>();
+	protected ConcurrentHashMap<Integer, Player> players = new ConcurrentHashMap<Integer, Player>();
 	private final List<VisibleObject> spawned = new ArrayList<VisibleObject>();
 
 	public IdianDepthsLocation() {
@@ -71,7 +71,7 @@ public class IdianDepthsLocation {
 		return spawned;
 	}
 
-	public FastMap<Integer, Player> getPlayers() {
+	public ConcurrentHashMap<Integer, Player> getPlayers() {
 		return players;
 	}
 }

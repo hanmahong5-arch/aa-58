@@ -8,6 +8,8 @@ import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.util.Locale;
 
+import javax.tools.ToolProvider;
+
 /**
  * 资源定位器类，用于定位类文件和资源的物理位置
  * Resource locator class for locating physical locations of class files and resources
@@ -153,20 +155,9 @@ public final class Locator {
      *         tools.jar File object, returns null if already in classpath or not found
      */
     public static File getToolsJar() {
-        boolean toolsJarAvailable = false;
-
-        try {
-            Class.forName("com.sun.tools.javac.Main");
-            toolsJarAvailable = true;
-        } catch (Exception var4) {
-            try {
-                Class.forName("sun.tools.javac.Main");
-                toolsJarAvailable = true;
-            } catch (Exception var3) {
-            }
-        }
-
-        if (toolsJarAvailable) {
+        // On modern JVMs (Java 9+), the compiler is bundled in the JDK.
+        // No separate tools.jar is needed.
+        if (ToolProvider.getSystemJavaCompiler() != null) {
             return null;
         } else {
             String javaHome = System.getProperty("java.home");

@@ -28,12 +28,12 @@ import com.aionemu.gameserver.skillengine.SkillEngine;
 import com.aionemu.gameserver.utils.MathUtil;
 import com.aionemu.gameserver.world.knownlist.Visitor;
 
-import javolution.util.FastList;
+import java.util.ArrayList;
 
 public class CuringZoneService {
 
 	Logger log = LoggerFactory.getLogger(CuringZoneService.class);
-	private FastList<CuringObject> curingObjects = new FastList<CuringObject>();
+	private ArrayList<CuringObject> curingObjects = new ArrayList<CuringObject>();
 
 	private CuringZoneService() {
 		for (CuringTemplate t : DataManager.CURING_OBJECTS_DATA.getCuringObject()) {

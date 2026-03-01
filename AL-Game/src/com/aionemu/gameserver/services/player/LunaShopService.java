@@ -56,7 +56,7 @@ import com.aionemu.gameserver.world.World;
 import com.aionemu.gameserver.world.WorldMapInstance;
 import com.aionemu.gameserver.world.knownlist.Visitor;
 
-import javolution.util.FastList;
+import java.util.ArrayList;
 
 /****/
 /**
@@ -208,7 +208,7 @@ public class LunaShopService {
 			DailyCraft.clear();
 		}
 
-		FastList<LunaTemplate> test = DataManager.LUNA_DATA.getLunaTemplatesAny();
+		ArrayList<LunaTemplate> test = DataManager.LUNA_DATA.getLunaTemplatesAny();
 		Random rand = new Random();
 		for (int i = 0; i < 5; i++) {
 			int randomIndex = rand.nextInt(test.size());

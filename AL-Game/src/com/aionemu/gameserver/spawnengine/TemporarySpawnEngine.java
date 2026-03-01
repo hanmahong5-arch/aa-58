@@ -25,13 +25,13 @@ import com.aionemu.gameserver.model.templates.spawns.SpawnGroup2;
 import com.aionemu.gameserver.model.templates.spawns.SpawnTemplate;
 import com.aionemu.gameserver.model.templates.spawns.TemporarySpawn;
 
-import javolution.util.FastList;
-import javolution.util.FastMap;
+import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class TemporarySpawnEngine {
 
-	private static final FastList<SpawnGroup2> temporarySpawns = new FastList<SpawnGroup2>();
-	private static final FastMap<SpawnGroup2, HashSet<Integer>> tempSpawnInstanceMap = new FastMap<SpawnGroup2, HashSet<Integer>>();
+	private static final ArrayList<SpawnGroup2> temporarySpawns = new ArrayList<SpawnGroup2>();
+	private static final ConcurrentHashMap<SpawnGroup2, HashSet<Integer>> tempSpawnInstanceMap = new ConcurrentHashMap<SpawnGroup2, HashSet<Integer>>();
 
 	public static void spawnAll() {
 		spawn(true);

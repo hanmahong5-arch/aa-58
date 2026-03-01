@@ -31,7 +31,6 @@ import org.slf4j.LoggerFactory;
 
 import com.aionemu.commons.configs.CommonsConfig;
 
-import javolution.text.TextBuilder;
 
 /**
  * @author NB4L1
@@ -77,12 +76,7 @@ public class ExecuteWrapper implements Executor {
             
             long runtimeInMillisec = TimeUnit.NANOSECONDS.toMillis(runtimeInNanosec);
             if (runtimeInMillisec > maximumRuntimeInMillisecWithoutWarning) {
-                TextBuilder tb = TextBuilder.newInstance();
-                tb.append(clazz)
-                  .append(" - 执行时间: ")
-                  .append(runtimeInMillisec)
-                  .append("毫秒");
-                log.warn(tb.toString());
+                log.warn("{} - execution time: {}ms", clazz, runtimeInMillisec);
             }
         }
     }

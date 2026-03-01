@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.aionemu.gameserver.model.templates.assemblednpc.AssembledNpcTemplate;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author xTz
@@ -38,8 +38,8 @@ public class AssembledNpcsData {
 
 	@XmlElement(name = "assembled_npc", type = AssembledNpcTemplate.class)
 	private List<AssembledNpcTemplate> templates;
-	private final Map<Integer, AssembledNpcTemplate> assembledNpcsTemplates = new FastMap<Integer, AssembledNpcTemplate>()
-			.shared();
+	private final Map<Integer, AssembledNpcTemplate> assembledNpcsTemplates = new ConcurrentHashMap<Integer, AssembledNpcTemplate>()
+			;
 
 	void afterUnmarshal(Unmarshaller u, Object parent) {
 		for (AssembledNpcTemplate template : templates) {

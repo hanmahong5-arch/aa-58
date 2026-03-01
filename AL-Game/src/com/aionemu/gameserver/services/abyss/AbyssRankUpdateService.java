@@ -70,6 +70,17 @@ public class AbyssRankUpdateService {
 				performUpdate();
 			}
 		}, RankingConfig.TOP_RANKING_UPDATE_RULE, true);
+
+		// schedule daily GP loss for officer ranks
+		if (RankingConfig.TOP_RANKING_DAILY_GP_LOSS_ENABLE) {
+			log.info("Scheduling daily GP loss: {}", RankingConfig.TOP_RANKING_DAILY_GP_LOSS_TIME);
+			CronService.getInstance().schedule(new Runnable() {
+				@Override
+				public void run() {
+					updateDailyGpLoss();
+				}
+			}, RankingConfig.TOP_RANKING_DAILY_GP_LOSS_TIME, true);
+		}
 	}
 
 	public void scheduleUpdateMinute() {
@@ -255,6 +266,34 @@ public class AbyssRankUpdateService {
 		} else {
 			DAOManager.getDAO(AbyssRankDAO.class).updateAbyssRank(playerId, newRank);
 		}
+	}
+
+	/**
+	 * Apply daily GP loss for all officer ranks.
+	 * Offline players: via DAO SQL batch.
+	 * Online players: via GloryPointsService in-memory update.
+	 */
+	private void updateDailyGpLoss() {
+		log.info("Executing daily GP loss...");
+		AbyssRankDAO dao = DAOManager.getDAO(AbyssRankDAO.class);
+		for (AbyssRankEnum rank : AbyssRankEnum.values()) {
+			int loss = rank.getGpLossPerDay();
+			if (loss > 0) {
+				// offline players: direct DB update
+				dao.dailyUpdateGp(rank, loss);
+			}
+		}
+		// online players: in-memory adjustment
+		World.getInstance().doOnAllPlayers(new Visitor<Player>() {
+			@Override
+			public void visit(Player player) {
+				int loss = player.getAbyssRank().getRank().getGpLossPerDay();
+				if (loss > 0) {
+					GloryPointsService.addGp(player.getObjectId(), -loss);
+				}
+			}
+		});
+		log.info("Daily GP loss applied successfully.");
 	}
 
 	private static class SingletonHolder {

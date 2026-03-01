@@ -40,7 +40,7 @@ import com.aionemu.gameserver.network.aion.serverpackets.SM_FIND_GROUP;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_SYSTEM_MESSAGE;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Find Group Service
@@ -49,10 +49,10 @@ import javolution.util.FastMap;
  */
 public class FindGroupService {
 
-	private FastMap<Integer, FindGroup> elyosRecruitFindGroups = new FastMap<Integer, FindGroup>().shared();
-	private FastMap<Integer, FindGroup> elyosApplyFindGroups = new FastMap<Integer, FindGroup>().shared();
-	private FastMap<Integer, FindGroup> asmodianRecruitFindGroups = new FastMap<Integer, FindGroup>().shared();
-	private FastMap<Integer, FindGroup> asmodianApplyFindGroups = new FastMap<Integer, FindGroup>().shared();
+	private ConcurrentHashMap<Integer, FindGroup> elyosRecruitFindGroups = new ConcurrentHashMap<Integer, FindGroup>();
+	private ConcurrentHashMap<Integer, FindGroup> elyosApplyFindGroups = new ConcurrentHashMap<Integer, FindGroup>();
+	private ConcurrentHashMap<Integer, FindGroup> asmodianRecruitFindGroups = new ConcurrentHashMap<Integer, FindGroup>();
+	private ConcurrentHashMap<Integer, FindGroup> asmodianApplyFindGroups = new ConcurrentHashMap<Integer, FindGroup>();
 
 	private FindGroupService() {
 
@@ -205,7 +205,7 @@ public class FindGroupService {
 		cleanMap(asmodianApplyFindGroups, Race.ASMODIANS, 0x04);
 	}
 
-	private void cleanMap(FastMap<Integer, FindGroup> map, Race race, int action) {
+	private void cleanMap(ConcurrentHashMap<Integer, FindGroup> map, Race race, int action) {
 		for (FindGroup group : map.values()) {
 			if (group.getLastUpdate() + 60 * 60 < System.currentTimeMillis() / 1000) {
 				removeFindGroup(race, action, group.getObjectId());

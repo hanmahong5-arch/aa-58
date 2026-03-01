@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-import javolution.util.FastList;
+import java.util.ArrayList;
 
 /**
  * @author LokiReborn
@@ -38,7 +38,7 @@ public class StreamLocations {
 	public List<Location2D> getLocation() {
 
 		if (location == null) {
-			location = FastList.newInstance();
+			location = new ArrayList<>();
 		}
 		return this.location;
 	}

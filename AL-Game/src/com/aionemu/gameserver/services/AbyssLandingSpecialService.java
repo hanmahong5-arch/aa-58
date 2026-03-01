@@ -37,19 +37,19 @@ import com.aionemu.gameserver.services.abysslandingservice.landingspecialservice
 import com.aionemu.gameserver.services.abysslandingservice.landingspecialservice.SpecialLanding;
 import com.aionemu.gameserver.spawnengine.SpawnEngine;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class AbyssLandingSpecialService {
 	private static Logger log = LoggerFactory.getLogger(AbyssLandingService.class);
 	private static Map<Integer, LandingSpecialLocation> abyssSpecialLanding;
-	private final Map<Integer, SpecialLanding<?>> activeSpecialLanding = new FastMap<Integer, SpecialLanding<?>>()
-			.shared();
+	private final Map<Integer, SpecialLanding<?>> activeSpecialLanding = new ConcurrentHashMap<Integer, SpecialLanding<?>>()
+			;
 
 	public void initLandingSpecialLocations() {
 		abyssSpecialLanding = DataManager.LANDING_SPECIAL_LOCATION_DATA.getLandingSpecialLocations();
 		DAOManager.getDAO(AbyssSpecialLandingDAO.class).loadLandingSpecialLocations(abyssSpecialLanding);
 		for (LandingSpecialLocation loc : getLandingSpecialLocations().values()) {
-			if (loc.getType().equals(LandingSpecialStateType.ACTIVE)) {
+			if (LandingSpecialStateType.ACTIVE.equals(loc.getType())) {
 				spawn(loc, LandingSpecialStateType.ACTIVE);
 			}
 			log.info("[Abyss Landing Monument] ID: " + loc.getId() + " - STATUS: " + loc.getType());

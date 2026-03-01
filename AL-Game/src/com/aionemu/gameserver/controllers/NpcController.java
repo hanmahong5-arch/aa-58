@@ -75,6 +75,8 @@ import com.aionemu.gameserver.utils.stats.StatFunctions;
 import com.aionemu.gameserver.world.World;
 import com.aionemu.gameserver.world.knownlist.Visitor;
 import com.aionemu.gameserver.world.zone.ZoneInstance;
+import com.aionemu.gameserver.configs.main.GeoDataConfig;
+import com.aionemu.gameserver.controllers.movement.AerialNpcMoveController;
 
 public class NpcController extends CreatureController<Npc> {
 	private static final Logger log = LoggerFactory.getLogger(NpcController.class);
@@ -145,7 +147,11 @@ public class NpcController extends CreatureController<Npc> {
 		if (owner.getSpawn().getState() != 0) {
 			owner.setState(owner.getSpawn().getState());
 		}
-		
+
+		// aerial NPCs use dedicated controller that skips NavMesh ground clamping
+		if (GeoDataConfig.GEO_NAV_AERIAL_ENABLE && owner.isInFlyingState()) {
+			owner.setMoveController(new AerialNpcMoveController(owner));
+		}
 	}
 
 	@Override
@@ -230,6 +236,9 @@ public class NpcController extends CreatureController<Npc> {
 			return;
 		}
 
+		// instance AP multiplier from 4.8 InstanceHandler
+		float apMultiplier = getOwner().getPosition().getWorldMapInstance().getInstanceHandler().getApMultiplier();
+
 		float totalDmg = 0;
 
 		for (AggroInfo info : finalList) {
@@ -279,6 +288,7 @@ public class NpcController extends CreatureController<Npc> {
 					rewardXp *= percentage;
 					rewardDp *= percentage;
 					rewardAp *= percentage;
+					rewardAp *= apMultiplier;
 					QuestEngine.getInstance().onKill(new QuestEnv(getOwner(), player, 0, 0));
 					// When a player defeat a "Boss" all ppls on server see!!!
 					defeatNamedMsg(player);

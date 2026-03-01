@@ -1,107 +1,82 @@
 package com.aionemu.commons.database.dao;
 
-import static com.aionemu.commons.database.DatabaseFactory.getDatabaseMajorVersion;
-import static com.aionemu.commons.database.DatabaseFactory.getDatabaseMinorVersion;
-import static com.aionemu.commons.database.DatabaseFactory.getDatabaseName;
-
-import java.io.FileNotFoundException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.xml.bind.JAXBException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.aionemu.commons.configs.DatabaseConfig;
-import com.aionemu.commons.scripting.classlistener.AggregatedClassListener;
-import com.aionemu.commons.scripting.classlistener.OnClassLoadUnloadListener;
-import com.aionemu.commons.scripting.classlistener.ScheduledTaskClassListener;
-import com.aionemu.commons.scripting.scriptmanager.ScriptManager;
-
 /**
- * DAO管理器类
- * DAO Manager Class
+ * DAO Manager — central registry for all DAO implementations.
  *
- * 这个类负责管理所有DAO实现类的注册和获取。它维护了一个DAO实现类的注册表，
- * 并提供了注册、注销和获取DAO实现的方法。
- * This class manages the registration and retrieval of all DAO implementations.
- * It maintains a registry of DAO implementations and provides methods for
- * registering, unregistering and retrieving DAO implementations.
+ * Concrete implementations are registered at startup by server-specific
+ * registry classes (GameDAORegistry / LoginDAORegistry) via
+ * {@link #registerDAO(DAO)}.  Callers retrieve implementations through
+ * {@link #getDAO(Class)}.
+ *
+ * Thread-safety: uses a two-phase freeze pattern inspired by Spring
+ * {@code DefaultListableBeanFactory.freezeConfiguration()}.
+ * During registration (pre-freeze), writes are synchronized.
+ * After {@link #init()}, the map becomes an unmodifiable snapshot
+ * published via a volatile reference — safe for lock-free concurrent reads.
  *
  * @author SoulKeeper
  * @author Saelya
  */
 public class DAOManager {
 
-    /**
-     * DAOManager类的日志记录器
-     * Logger for DAOManager class
-     */
     private static final Logger log = LoggerFactory.getLogger(DAOManager.class);
 
     /**
-     * 已注册的DAO集合
-     * Collection of registered DAOs
+     * Mutable staging map used only during the registration phase.
+     * Guarded by {@code synchronized(DAOManager.class)}.
      */
-    private static final Map<String, DAO> daoMap = new HashMap<String, DAO>();
+    private static final Map<String, DAO> stagingMap = new HashMap<>();
 
     /**
-     * 负责加载DAO实现的脚本管理器
-     * Script manager responsible for loading DAO implementations
+     * Immutable, volatile-published snapshot created by {@link #init()}.
+     * All post-init reads go through this reference with no synchronization.
      */
-    private static ScriptManager scriptManager;
+    private static volatile Map<String, DAO> daoMap;
+
+    /** True after {@link #init()} has been called. */
+    private static volatile boolean frozen = false;
 
     /**
-     * 初始化DAOManager
-     * Initializes DAOManager
+     * Freeze the registry and publish an immutable snapshot.
+     * Called after the server-specific registry has finished registration.
      */
-    public static void init() {
-        try {
-            scriptManager = new ScriptManager();
-
-            // 初始化默认的类监听器 / Initialize default class listeners
-            AggregatedClassListener acl = new AggregatedClassListener();
-            acl.addClassListener(new OnClassLoadUnloadListener());
-            acl.addClassListener(new ScheduledTaskClassListener());
-            acl.addClassListener(new DAOLoader());
-            scriptManager.setGlobalClassListener(acl);
-
-            scriptManager.load(DatabaseConfig.DATABASE_SCRIPTCONTEXT_DESCRIPTOR);
-        } catch (RuntimeException e) {
-            throw new Error(e.getMessage(), e);
-        } catch (FileNotFoundException e) {
-            throw new Error("Can't load database script context: " + DatabaseConfig.DATABASE_SCRIPTCONTEXT_DESCRIPTOR, e);
-        } catch (JAXBException e) {
-            throw new Error("Can't compile database handlers - check your MySQL5 implementations", e);
-        } catch (Exception e) {
-            throw new Error("A fatal error occurred during loading or compiling the database handlers", e);
-        }
-
+    public static synchronized void init() {
+        daoMap = Collections.unmodifiableMap(new HashMap<>(stagingMap));
+        frozen = true;
         log.info("Loaded " + daoMap.size() + " DAO implementations.");
     }
 
     /**
-     * 关闭DAOManager
-     * Shuts down DAOManager
+     * Shut down DAOManager and clear all registrations.
      */
-    public static void shutdown() {
-        scriptManager.shutdown();
-        daoMap.clear();
-        scriptManager = null;
+    public static synchronized void shutdown() {
+        stagingMap.clear();
+        daoMap = Collections.emptyMap();
+        frozen = false;
     }
 
     /**
-     * 根据DAO类获取其实现
-     * Returns DAO implementation by DAO class
+     * Retrieve a DAO implementation by its abstract base class.
      *
-     * @param clazz DAO类 / DAO class
-     * @param <T> DAO类型 / DAO type
-     * @return DAO实现 / DAO implementation
-     * @throws DAONotFoundException 如果未找到DAO实现 / If DAO implementation not found
+     * @param clazz abstract DAO class
+     * @param <T>   DAO type
+     * @return concrete DAO implementation
+     * @throws DAONotFoundException if no implementation is registered
+     * @throws IllegalStateException if called before init()
      */
-    @SuppressWarnings("unchecked")
     public static <T extends DAO> T getDAO(Class<T> clazz) throws DAONotFoundException {
+        if (!frozen) {
+            throw new IllegalStateException(
+                    "DAOManager not initialized — call init() before getDAO()");
+        }
+
         DAO result = daoMap.get(clazz.getName());
 
         if (result == null) {
@@ -110,71 +85,39 @@ public class DAOManager {
             throw new DAONotFoundException(s);
         }
 
-        return (T) result;
+        return clazz.cast(result);
     }
 
     /**
-     * 注册DAO实现类
-     * Registers DAO implementation
+     * Register a concrete DAO implementation.
+     * Called by GameDAORegistry / LoginDAORegistry during startup.
      *
-     * @param daoClass DAO实现类 / DAO implementation class
-     * @throws DAOAlreadyRegisteredException 如果DAO已注册 / If DAO is already registered
-     * @throws IllegalAccessException 如果实例化DAO时出错 / If error during DAO instantiation
-     * @throws InstantiationException 如果实例化DAO时出错 / If error during DAO instantiation
+     * @param dao concrete DAO instance
+     * @throws DAOAlreadyRegisteredException if a DAO with the same className is already registered
+     * @throws IllegalStateException if called after init() (registry is frozen)
      */
-    public static void registerDAO(Class<? extends DAO> daoClass) throws DAOAlreadyRegisteredException, IllegalAccessException, InstantiationException {
-        DAO dao = daoClass.newInstance();
-
-        if (!dao.supports(getDatabaseName(), getDatabaseMajorVersion(), getDatabaseMinorVersion())) {
-            return;
-        }
-
+    public static void registerDAO(DAO dao) {
         synchronized (DAOManager.class) {
-            DAO oldDao = daoMap.get(dao.getClassName());
-            if (oldDao != null) {
-                StringBuilder sb = new StringBuilder();
-                sb.append("DAO with className ").append(dao.getClassName()).append(" is used by ");
-                sb.append(oldDao.getClass().getName()).append(". Can't override with ");
-                sb.append(daoClass.getName()).append(".");
-                String s = sb.toString();
-                log.error(s);
-                throw new DAOAlreadyRegisteredException(s);
+            if (frozen) {
+                throw new IllegalStateException(
+                        "DAOManager is frozen — cannot register DAO after init()");
             }
-            daoMap.put(dao.getClassName(), dao);
+
+            String key = dao.getClassName();
+            if (stagingMap.containsKey(key)) {
+                throw new DAOAlreadyRegisteredException(
+                        "DAO " + key + " already registered by " +
+                        stagingMap.get(key).getClass().getName() +
+                        ". Cannot override with " + dao.getClass().getName() + ".");
+            }
+            stagingMap.put(key, dao);
         }
 
         if (log.isDebugEnabled()) {
-            log.debug("DAO " + dao.getClassName() + " was successfully registered.");
+            log.debug("DAO " + dao.getClassName() + " registered.");
         }
     }
 
-    /**
-     * 注销DAO实现类
-     * Unregisters DAO implementation
-     *
-     * @param daoClass 要注销的DAO实现类 / DAO implementation class to unregister
-     */
-    public static void unregisterDAO(Class<? extends DAO> daoClass) {
-        synchronized (DAOManager.class) {
-            for (DAO dao : daoMap.values()) {
-                if (dao.getClass() == daoClass) {
-                    daoMap.remove(dao.getClassName());
-
-                    if (log.isDebugEnabled()) {
-                        log.debug("DAO " + dao.getClassName() + " was successfully unregistered.");
-                    }
-
-                    break;
-                }
-            }
-        }
-    }
-
-    /**
-     * 私有构造函数，防止实例化
-     * Private constructor to prevent instantiation
-     */
     private DAOManager() {
-        // 空构造函数 / Empty constructor
     }
 }

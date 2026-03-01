@@ -47,7 +47,7 @@ import com.aionemu.gameserver.utils.ThreadPoolManager;
 import com.aionemu.gameserver.world.World;
 import com.aionemu.gameserver.world.knownlist.Visitor;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Rinzler (Encom)
@@ -57,7 +57,7 @@ public class AgentService {
 	private AgentSchedule agentSchedule;
 	private Map<Integer, AgentLocation> agent;
 	private static final int duration = CustomConfig.AGENT_DURATION;
-	private final Map<Integer, AgentFight<?>> activeFights = new FastMap<Integer, AgentFight<?>>().shared();
+	private final Map<Integer, AgentFight<?>> activeFights = new ConcurrentHashMap<Integer, AgentFight<?>>();
 	private static final Logger log = LoggerFactory.getLogger(AgentService.class);
 
 	public void initAgentLocations() {

@@ -26,7 +26,7 @@ import com.aionemu.gameserver.network.aion.serverpackets.SM_MOTION;
 import com.aionemu.gameserver.taskmanager.tasks.ExpireTimerTask;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,7 +61,7 @@ public class MotionList {
 
     public void add(Motion motion, boolean persist) {
         if (motions == null) {
-            motions = new FastMap<Integer, Motion>();
+            motions = new ConcurrentHashMap<Integer, Motion>();
         }
         if (motions.containsKey(motion.getId()) && motion.getExpireTime() == 0) {
             remove(motion.getId());
@@ -69,7 +69,7 @@ public class MotionList {
         motions.put(motion.getId(), motion);
         if (motion.isActive()) {
             if (activeMotions == null) {
-                activeMotions = new FastMap<Integer, Motion>();
+                activeMotions = new ConcurrentHashMap<Integer, Motion>();
             }
             Motion old = activeMotions.put(Motion.motionType.get(motion.getId()), motion);
             if (old != null) {
@@ -105,7 +105,7 @@ public class MotionList {
                 return;
             }
             if (activeMotions == null) {
-                activeMotions = new FastMap<Integer, Motion>();
+                activeMotions = new ConcurrentHashMap<Integer, Motion>();
             }
             Motion old = activeMotions.put(motionType, motion);
             if (old != null) {

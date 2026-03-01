@@ -28,7 +28,7 @@ import com.aionemu.gameserver.model.ranking.SeasonRankingEnum;
 import com.aionemu.gameserver.model.ranking.SeasonRankingResult;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_SEASON_RANKING;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Wnkrz on 24/07/2017.
@@ -37,7 +37,7 @@ import javolution.util.FastMap;
 public class SeasonRankingUpdateService {
 	private static final Logger log = LoggerFactory.getLogger(SeasonRankingService.class);
 	private int lastUpdate;
-	private final FastMap<Integer, List<SM_SEASON_RANKING>> players = new FastMap<Integer, List<SM_SEASON_RANKING>>();
+	private final ConcurrentHashMap<Integer, List<SM_SEASON_RANKING>> players = new ConcurrentHashMap<Integer, List<SM_SEASON_RANKING>>();
 
 	public void onStart() {
 		renewPlayerRanking(SeasonRankingEnum.HALL_OF_TENACITY.getId());

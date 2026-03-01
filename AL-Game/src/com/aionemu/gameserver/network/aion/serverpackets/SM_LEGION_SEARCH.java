@@ -21,12 +21,12 @@ import com.aionemu.gameserver.network.aion.AionConnection;
 import com.aionemu.gameserver.network.aion.AionServerPacket;
 import com.aionemu.gameserver.services.LegionService;
 
-import javolution.util.FastList;
+import java.util.ArrayList;
 
 public class SM_LEGION_SEARCH extends AionServerPacket {
-	private FastList<Legion> legions;
+	private ArrayList<Legion> legions;
 
-	public SM_LEGION_SEARCH(FastList<Legion> legions) {
+	public SM_LEGION_SEARCH(ArrayList<Legion> legions) {
 		this.legions = legions;
 	}
 

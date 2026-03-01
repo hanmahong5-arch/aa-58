@@ -29,7 +29,7 @@ import com.aionemu.gameserver.network.aion.AionServerPacket;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.world.World;
 
-import javolution.util.FastList;
+import java.util.ArrayList;
 
 /**
  * @author alexa026 , orz
@@ -41,7 +41,7 @@ public class SM_TELEPORT_MAP extends AionServerPacket {
 	private TeleporterTemplate teleport;
 	public Npc npc;
 	private static final Logger log = LoggerFactory.getLogger(SM_TELEPORT_MAP.class);
-	private static final FastList<Integer> disableTeleportNpcs = new FastList<Integer>();
+	private static final ArrayList<Integer> disableTeleportNpcs = new ArrayList<Integer>();
 
 	public SM_TELEPORT_MAP(Player player, int targetObjectId, TeleporterTemplate teleport) {
 		this.player = player;

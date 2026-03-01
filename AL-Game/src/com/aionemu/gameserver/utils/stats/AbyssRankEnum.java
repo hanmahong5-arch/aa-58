@@ -112,6 +112,24 @@ public enum AbyssRankEnum {
 		return descriptionId;
 	}
 
+	/**
+	 * @return Daily GP loss for this rank. Officer ranks lose GP daily; soldier ranks return 0.
+	 */
+	public int getGpLossPerDay() {
+		return switch (this) {
+			case SUPREME_COMMANDER -> 200;
+			case COMMANDER -> 150;
+			case GREAT_GENERAL -> 120;
+			case GENERAL -> 100;
+			case STAR5_OFFICER -> 80;
+			case STAR4_OFFICER -> 60;
+			case STAR3_OFFICER -> 40;
+			case STAR2_OFFICER -> 25;
+			case STAR1_OFFICER -> 10;
+			default -> 0;
+		};
+	}
+
 	public static DescriptionId getRankDescriptionId(Player player) {
 		int pRankId = player.getAbyssRank().getRank().getId();
 		for (AbyssRankEnum rank : values()) {

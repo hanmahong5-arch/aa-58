@@ -29,7 +29,7 @@ import com.aionemu.gameserver.world.World;
 import com.aionemu.gameserver.world.knownlist.Visitor;
 import com.aionemu.gameserver.world.zone.ZoneAttributes;
 
-import javolution.util.FastList;
+import java.util.ArrayList;
 
 /**
  * @author Rinzler (Encom)
@@ -37,7 +37,7 @@ import javolution.util.FastList;
 
 public class DisputeLandService {
 	private boolean active;
-	private FastList<Integer> worlds = new FastList<Integer>();
+	private ArrayList<Integer> worlds = new ArrayList<Integer>();
 	private static final int duration = CustomConfig.DISPUTE_LAND_DURATION;
 	private static final Logger log = LoggerFactory.getLogger(DisputeLandService.class);
 

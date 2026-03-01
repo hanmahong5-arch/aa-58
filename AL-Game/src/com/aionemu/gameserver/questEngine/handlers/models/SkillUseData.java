@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlType;
 import com.aionemu.gameserver.questEngine.QuestEngine;
 import com.aionemu.gameserver.questEngine.handlers.template.SkillUse;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "SkillUseData")
@@ -42,7 +42,7 @@ public class SkillUseData extends XMLQuest {
 
 	@Override
 	public void register(QuestEngine questEngine) {
-		FastMap<List<Integer>, QuestSkillData> questSkills = new FastMap<List<Integer>, QuestSkillData>();
+		ConcurrentHashMap<List<Integer>, QuestSkillData> questSkills = new ConcurrentHashMap<List<Integer>, QuestSkillData>();
 		for (QuestSkillData qsd : skills) {
 			questSkills.put(qsd.getSkillIds(), qsd);
 		}

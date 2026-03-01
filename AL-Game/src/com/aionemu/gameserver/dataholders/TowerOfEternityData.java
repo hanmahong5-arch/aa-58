@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import com.aionemu.gameserver.model.templates.towerofeternity.TowerOfEternityTemplate;
 import com.aionemu.gameserver.model.towerofeternity.TowerOfEternityLocation;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Wnkrz on 22/08/2017.
@@ -41,7 +41,7 @@ public class TowerOfEternityData {
 	private List<TowerOfEternityTemplate> towerOfEternityTemplates;
 
 	@XmlTransient
-	private FastMap<Integer, TowerOfEternityLocation> towerOfEternity = new FastMap<Integer, TowerOfEternityLocation>();
+	private ConcurrentHashMap<Integer, TowerOfEternityLocation> towerOfEternity = new ConcurrentHashMap<Integer, TowerOfEternityLocation>();
 
 	void afterUnmarshal(Unmarshaller u, Object parent) {
 		for (TowerOfEternityTemplate template : towerOfEternityTemplates) {
@@ -53,7 +53,7 @@ public class TowerOfEternityData {
 		return towerOfEternity.size();
 	}
 
-	public FastMap<Integer, TowerOfEternityLocation> getTowerOfEternityLocations() {
+	public ConcurrentHashMap<Integer, TowerOfEternityLocation> getTowerOfEternityLocations() {
 		return towerOfEternity;
 	}
 }

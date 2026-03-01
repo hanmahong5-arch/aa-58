@@ -16,6 +16,7 @@
  */
 package com.aionemu.gameserver.model.gameobjects;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -32,8 +33,7 @@ import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.world.World;
 import com.aionemu.gameserver.world.knownlist.Visitor;
 
-import javolution.util.FastList;
-import javolution.util.FastSet;
+import java.util.ArrayList;
 
 public class Kisk extends SummonedObject<Player> {
 	private final Legion ownerLegion;
@@ -51,7 +51,7 @@ public class Kisk extends SummonedObject<Player> {
 		if (this.kiskStatsTemplate == null) {
 			this.kiskStatsTemplate = new KiskStatsTemplate();
 		}
-		this.kiskMemberIds = new FastSet<Integer>(kiskStatsTemplate.getMaxMembers());
+		this.kiskMemberIds = new HashSet<>(kiskStatsTemplate.getMaxMembers());
 		this.remainingResurrections = this.kiskStatsTemplate.getMaxResurrects();
 		this.kiskSpawnTime = System.currentTimeMillis() / 1000;
 		this.ownerLegion = owner.getLegion();
@@ -83,7 +83,7 @@ public class Kisk extends SummonedObject<Player> {
 	}
 
 	public List<Player> getCurrentMemberList() {
-		List<Player> currentMemberList = new FastList<Player>();
+		List<Player> currentMemberList = new ArrayList<Player>();
 		for (int memberId : this.kiskMemberIds) {
 			Player member = World.getInstance().findPlayer(memberId);
 			if (member != null) {

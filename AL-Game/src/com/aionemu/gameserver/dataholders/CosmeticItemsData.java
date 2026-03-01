@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.aionemu.gameserver.model.templates.cosmeticitems.CosmeticItemTemplate;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *
@@ -38,8 +38,8 @@ import javolution.util.FastMap;
 public class CosmeticItemsData {
 	@XmlElement(name = "cosmetic_item", type = CosmeticItemTemplate.class)
 	private List<CosmeticItemTemplate> templates;
-	private final Map<String, CosmeticItemTemplate> cosmeticItemTemplates = new FastMap<String, CosmeticItemTemplate>()
-			.shared();
+	private final Map<String, CosmeticItemTemplate> cosmeticItemTemplates = new ConcurrentHashMap<String, CosmeticItemTemplate>()
+			;
 
 	void afterUnmarshal(Unmarshaller u, Object parent) {
 		for (CosmeticItemTemplate template : templates) {

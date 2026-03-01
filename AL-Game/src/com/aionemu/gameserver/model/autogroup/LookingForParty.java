@@ -22,7 +22,7 @@ import java.util.List;
 import com.aionemu.commons.taskmanager.AbstractLockManager;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 
-import javolution.util.FastList;
+import java.util.ArrayList;
 
 public class LookingForParty extends AbstractLockManager {
 	private List<SearchInstance> searchInstances = new ArrayList<SearchInstance>();
@@ -52,7 +52,7 @@ public class LookingForParty extends AbstractLockManager {
 	}
 
 	public List<SearchInstance> getSearchInstances() {
-		FastList<SearchInstance> tempList = FastList.newInstance();
+		ArrayList<SearchInstance> tempList = new ArrayList<>();
 		for (SearchInstance si : searchInstances) {
 			tempList.add(si);
 		}

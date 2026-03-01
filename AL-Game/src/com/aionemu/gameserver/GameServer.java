@@ -44,6 +44,7 @@ import org.slf4j.LoggerFactory;
 import com.aionemu.commons.database.DatabaseFactory;
 import com.aionemu.commons.database.dao.DAOManager;
 import com.aionemu.commons.network.NioServer;
+import com.aionemu.gameserver.dao.GameDAORegistry;
 import com.aionemu.commons.network.ServerCfg;
 import com.aionemu.commons.services.CronService;
 import com.aionemu.commons.utils.AEInfos;
@@ -55,6 +56,7 @@ import com.aionemu.gameserver.configs.main.AutoGroupConfig;
 import com.aionemu.gameserver.configs.main.CustomConfig;
 import com.aionemu.gameserver.configs.main.EventsConfig;
 import com.aionemu.gameserver.configs.main.FFAConfig;
+import com.aionemu.gameserver.configs.main.GeoDataConfig;
 import com.aionemu.gameserver.configs.main.GSConfig;
 import com.aionemu.gameserver.configs.main.PvPModConfig;
 import com.aionemu.gameserver.configs.main.RankingConfig;
@@ -175,10 +177,10 @@ import com.aionemu.gameserver.utils.javaagent.JavaAgentUtils;
 import com.aionemu.gameserver.world.World;
 import com.aionemu.gameserver.world.geo.GeoService;
 import com.aionemu.gameserver.world.geo.nav.NavService;
+import com.aionemu.gameserver.world.geo.nav.RecastNavData;
 import com.aionemu.gameserver.world.zone.ZoneService;
 import com.aionemu.gameserver.services.gc.GarbageCollector;
 
-import ch.lambdaj.Lambda;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
 import ch.qos.logback.core.joran.spi.JoranException;
@@ -273,8 +275,7 @@ public class GameServer {
 		long start = System.currentTimeMillis();
 		log.info("GameServer starting...");
 
-		Lambda.enableJitting(true);
-		final GameEngine[] parallelEngines = { 
+		final GameEngine[] parallelEngines = {
 			QuestEngine.getInstance(), 
 			InstanceEngine.getInstance(),
 			AI2Engine.getInstance(), 
@@ -318,6 +319,9 @@ public class GameServer {
 		Util.printSection(" *** Geodata *** ");
 		GeoService.getInstance().initializeGeo();
 		NavService.getInstance().initializeNav();
+		if (GeoDataConfig.GEO_NAV_RECAST_ENABLE) {
+			RecastNavData.getInstance().preload();
+		}
 		DropRegistrationService.getInstance();
 		GameServer gs = new GameServer();
 		DAOManager.getDAO(PlayerDAO.class).setPlayersOffline(false);
@@ -739,6 +743,7 @@ public class GameServer {
 		log.info("Database factory initialized in {} ms", dbInitTime);
 		
 		long daoStart = System.currentTimeMillis();
+		GameDAORegistry.init();
 		DAOManager.init();
 		long daoTime = System.currentTimeMillis() - daoStart;
 		log.info("DAO Manager initialized in {} ms", daoTime);

@@ -38,7 +38,7 @@ import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.world.World;
 import com.aionemu.gameserver.world.knownlist.Visitor;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Wnkrz on 27/08/2017.
@@ -47,7 +47,7 @@ import javolution.util.FastMap;
 public class OutpostService {
 	private static final Logger log = LoggerFactory.getLogger(OutpostService.class);
 
-	private final Map<Integer, Outpost<?>> active = new FastMap<Integer, Outpost<?>>().shared();
+	private final Map<Integer, Outpost<?>> active = new ConcurrentHashMap<Integer, Outpost<?>>();
 	private Map<Integer, OutpostLocation> outposts;
 
 	public void initOutpostLocations() {

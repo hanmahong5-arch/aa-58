@@ -16,10 +16,6 @@
  */
 package com.aionemu.gameserver.dataholders;
 
-import static ch.lambdaj.Lambda.extractIterator;
-import static ch.lambdaj.Lambda.flatten;
-import static ch.lambdaj.Lambda.on;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -28,6 +24,7 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
@@ -85,7 +82,7 @@ import com.aionemu.gameserver.world.World;
 import com.aionemu.gameserver.world.WorldMap;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 @XmlRootElement(name = "spawns")
 @XmlType(namespace = "", name = "SpawnsData2")
@@ -96,7 +93,7 @@ public class SpawnsData2 {
 	@XmlElement(name = "spawn_map", type = SpawnMap.class)
 	protected List<SpawnMap> templates;
 
-	private TIntObjectHashMap<FastMap<Integer, SimpleEntry<SpawnGroup2, Spawn>>> allSpawnMaps = new TIntObjectHashMap<FastMap<Integer, SimpleEntry<SpawnGroup2, Spawn>>>();
+	private TIntObjectHashMap<ConcurrentHashMap<Integer, SimpleEntry<SpawnGroup2, Spawn>>> allSpawnMaps = new TIntObjectHashMap<ConcurrentHashMap<Integer, SimpleEntry<SpawnGroup2, Spawn>>>();
 	private TIntObjectHashMap<List<SpawnGroup2>> siegeSpawnMaps = new TIntObjectHashMap<List<SpawnGroup2>>();
 	private TIntObjectHashMap<List<SpawnGroup2>> baseSpawnMaps = new TIntObjectHashMap<List<SpawnGroup2>>();
 	private TIntObjectHashMap<List<SpawnGroup2>> vortexSpawnMaps = new TIntObjectHashMap<List<SpawnGroup2>>();
@@ -127,7 +124,7 @@ public class SpawnsData2 {
 			for (SpawnMap spawnMap : templates) {
 				int mapId = spawnMap.getMapId();
 				if (!allSpawnMaps.containsKey(mapId)) {
-					allSpawnMaps.put(mapId, new FastMap<Integer, SimpleEntry<SpawnGroup2, Spawn>>());
+					allSpawnMaps.put(mapId, new ConcurrentHashMap<Integer, SimpleEntry<SpawnGroup2, Spawn>>());
 				}
 				for (Spawn spawn : spawnMap.getSpawns()) {
 					if (spawn.isCustom()) {
@@ -142,7 +139,7 @@ public class SpawnsData2 {
 							new SimpleEntry(new SpawnGroup2(mapId, spawn), spawn));
 				}
 				if (!allSpawnMaps.containsKey(mapId)) {
-					allSpawnMaps.put(mapId, new FastMap<Integer, SimpleEntry<SpawnGroup2, Spawn>>());
+					allSpawnMaps.put(mapId, new ConcurrentHashMap<Integer, SimpleEntry<SpawnGroup2, Spawn>>());
 				}
 				for (SiegeSpawn SiegeSpawn : spawnMap.getSiegeSpawns()) {
 					int siegeId = SiegeSpawn.getSiegeId();
@@ -672,7 +669,7 @@ public class SpawnsData2 {
 		if (!allSpawnMaps.containsKey(worldId)) {
 			return Collections.emptyList();
 		}
-		return flatten(extractIterator(allSpawnMaps.get(worldId).values(), on(SimpleEntry.class).getKey()));
+		return allSpawnMaps.get(worldId).values().stream().map(e -> (SpawnGroup2) e.getKey()).collect(Collectors.toList());
 	}
 
 	public Spawn getSpawnsForNpc(int worldId, int npcId) {

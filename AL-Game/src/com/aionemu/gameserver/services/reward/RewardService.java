@@ -27,7 +27,7 @@ import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.templates.rewards.RewardEntryItem;
 import com.aionemu.gameserver.services.mail.SystemMailService;
 
-import javolution.util.FastList;
+import java.util.ArrayList;
 
 public class RewardService {
 	private RewardServiceDAO dao;
@@ -43,11 +43,11 @@ public class RewardService {
 	}
 
 	public void verify(Player player) {
-		FastList<RewardEntryItem> list = dao.getAvailable(player.getObjectId());
+		ArrayList<RewardEntryItem> list = dao.getAvailable(player.getObjectId());
 		if (list.size() == 0 || player.getMailbox() == null) {
 			return;
 		}
-		FastList<Integer> rewarded = FastList.newInstance();
+		ArrayList<Integer> rewarded = new ArrayList<>();
 		for (RewardEntryItem item : list) {
 			if (DataManager.ITEM_DATA.getItemTemplate(item.id) == null) {
 				log.warn("[RewardController][" + item.unique + "] null template for item " + item.id + " on player "
@@ -71,8 +71,6 @@ public class RewardService {
 		}
 		if (rewarded.size() > 0) {
 			dao.uncheckAvailable(rewarded);
-			FastList.recycle(rewarded);
-			FastList.recycle(list);
 		}
 	}
 }

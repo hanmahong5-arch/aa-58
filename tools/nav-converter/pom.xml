@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.aionemu.tools</groupId>
+    <artifactId>nav-converter</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+    <name>Aion NavMesh Converter</name>
+    <description>Converts legacy .nav binary files to Detour .bin format for recast4j</description>
+
+    <properties>
+        <maven.compiler.release>25</maven.compiler.release>
+        <recast4j.version>1.5.7</recast4j.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.recast4j</groupId>
+            <artifactId>recast</artifactId>
+            <version>${recast4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.recast4j</groupId>
+            <artifactId>detour</artifactId>
+            <version>${recast4j.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.4.2</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.aionemu.tools.navconverter.NavConverter</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals><goal>shade</goal></goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import com.aionemu.gameserver.model.agent.AgentLocation;
 import com.aionemu.gameserver.model.templates.agent.AgentTemplate;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Rinzler (Encom)
@@ -41,7 +41,7 @@ public class AgentData {
 	private List<AgentTemplate> agentTemplates;
 
 	@XmlTransient
-	private FastMap<Integer, AgentLocation> agent = new FastMap<Integer, AgentLocation>();
+	private ConcurrentHashMap<Integer, AgentLocation> agent = new ConcurrentHashMap<Integer, AgentLocation>();
 
 	void afterUnmarshal(Unmarshaller u, Object parent) {
 		for (AgentTemplate template : agentTemplates) {
@@ -53,7 +53,7 @@ public class AgentData {
 		return agent.size();
 	}
 
-	public FastMap<Integer, AgentLocation> getAgentLocations() {
+	public ConcurrentHashMap<Integer, AgentLocation> getAgentLocations() {
 		return agent;
 	}
 }

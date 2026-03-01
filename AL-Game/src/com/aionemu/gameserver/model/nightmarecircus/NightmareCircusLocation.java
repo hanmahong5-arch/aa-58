@@ -24,7 +24,7 @@ import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.templates.nightmarecircus.NightmareCircusTemplate;
 import com.aionemu.gameserver.services.nightmarecircusservice.CircusInstance;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Rinzler (Encom)
@@ -35,7 +35,7 @@ public class NightmareCircusLocation {
 	protected boolean isActive;
 	protected NightmareCircusTemplate template;
 	protected CircusInstance<NightmareCircusLocation> activeNightmareCircus;
-	protected FastMap<Integer, Player> players = new FastMap<Integer, Player>();
+	protected ConcurrentHashMap<Integer, Player> players = new ConcurrentHashMap<Integer, Player>();
 	private final List<VisibleObject> spawned = new ArrayList<VisibleObject>();
 
 	public NightmareCircusLocation() {
@@ -71,7 +71,7 @@ public class NightmareCircusLocation {
 		return spawned;
 	}
 
-	public FastMap<Integer, Player> getPlayers() {
+	public ConcurrentHashMap<Integer, Player> getPlayers() {
 		return players;
 	}
 }

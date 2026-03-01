@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlType;
 import com.aionemu.gameserver.questEngine.QuestEngine;
 import com.aionemu.gameserver.questEngine.handlers.template.ReportToMany;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ReportToManyData")
@@ -53,7 +53,7 @@ public class ReportToManyData extends XMLQuest {
 	@Override
 	public void register(QuestEngine questEngine) {
 		int maxVar = 0;
-		FastMap<Integer, NpcInfos> NpcInfo = new FastMap<Integer, NpcInfos>();
+		ConcurrentHashMap<Integer, NpcInfos> NpcInfo = new ConcurrentHashMap<Integer, NpcInfos>();
 		for (NpcInfos mi : npcInfos) {
 			NpcInfo.put(mi.getNpcId(), mi);
 			if (mi.getVar() > maxVar) {

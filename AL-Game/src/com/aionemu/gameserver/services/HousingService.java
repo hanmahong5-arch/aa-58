@@ -27,7 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.aionemu.commons.database.dao.DAOManager;
-import com.aionemu.commons.utils.internal.chmv8.PlatformDependent;
+import java.util.concurrent.ConcurrentHashMap;
 import com.aionemu.gameserver.controllers.HouseController;
 import com.aionemu.gameserver.dao.HousesDAO;
 import com.aionemu.gameserver.dataholders.DataManager;
@@ -56,7 +56,7 @@ import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.world.World;
 import com.aionemu.gameserver.world.WorldPosition;
 
-import javolution.util.FastList;
+import java.util.ArrayList;
 
 public class HousingService {
 
@@ -76,9 +76,9 @@ public class HousingService {
 
 	private HousingService() {
 		log.info("Loading housing data...");
-		customHouses = PlatformDependent.newConcurrentHashMap(
+		customHouses = new ConcurrentHashMap<>(
 				DAOManager.getDAO(HousesDAO.class).loadHouses(DataManager.HOUSE_DATA.getLands(), false));
-		studios = PlatformDependent.newConcurrentHashMap(
+		studios = new ConcurrentHashMap<>(
 				DAOManager.getDAO(HousesDAO.class).loadHouses(DataManager.HOUSE_DATA.getLands(), true));
 		log.info("Housing Service loaded.");
 	}
@@ -185,7 +185,7 @@ public class HousingService {
 	}
 
 	public void resetAppearance(House house) {
-		FastList<HouseDecoration> customParts = house.getRegistry().getCustomParts();
+		ArrayList<HouseDecoration> customParts = house.getRegistry().getCustomParts();
 		for (HouseDecoration deco : customParts) {
 			deco.setPersistentState(PersistentState.DELETED);
 		}
@@ -293,8 +293,8 @@ public class HousingService {
 		controller.spawnObjects();
 	}
 
-	public FastList<House> getCustomHouses() {
-		FastList<House> houses = FastList.newInstance();
+	public ArrayList<House> getCustomHouses() {
+		ArrayList<House> houses = new ArrayList<>();
 		for (List<House> mapHouses : housesByMapId.values()) {
 			houses.addAll(mapHouses);
 		}

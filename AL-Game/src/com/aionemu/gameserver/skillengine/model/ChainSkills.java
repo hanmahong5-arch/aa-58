@@ -22,11 +22,11 @@ import java.util.Map;
 
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ChainSkills {
 
-	private Map<String, ChainSkill> multiSkills = new FastMap<String, ChainSkill>();
+	private Map<String, ChainSkill> multiSkills = new ConcurrentHashMap<String, ChainSkill>();
 	private ChainSkill chainSkill = new ChainSkill("", 0, 0);
 
 	public int getChainCount(Player player, SkillTemplate template, String category) {

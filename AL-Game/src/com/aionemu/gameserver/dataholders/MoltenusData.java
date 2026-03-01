@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import com.aionemu.gameserver.model.moltenus.MoltenusLocation;
 import com.aionemu.gameserver.model.templates.moltenus.MoltenusTemplate;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Rinzler (Encom)
@@ -41,7 +41,7 @@ public class MoltenusData {
 	private List<MoltenusTemplate> moltenusTemplates;
 
 	@XmlTransient
-	private FastMap<Integer, MoltenusLocation> moltenus = new FastMap<Integer, MoltenusLocation>();
+	private ConcurrentHashMap<Integer, MoltenusLocation> moltenus = new ConcurrentHashMap<Integer, MoltenusLocation>();
 
 	void afterUnmarshal(Unmarshaller u, Object parent) {
 		for (MoltenusTemplate template : moltenusTemplates) {
@@ -53,7 +53,7 @@ public class MoltenusData {
 		return moltenus.size();
 	}
 
-	public FastMap<Integer, MoltenusLocation> getMoltenusLocations() {
+	public ConcurrentHashMap<Integer, MoltenusLocation> getMoltenusLocations() {
 		return moltenus;
 	}
 }

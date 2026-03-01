@@ -113,7 +113,7 @@ public class Skill {
 
 	public enum SkillMethod {
 
-		CAST, ITEM, PASSIVE, PROVOKED;
+		CAST, ITEM, PASSIVE, PROVOKED, PENALTY;
 	}
 
 	private Logger log = LoggerFactory.getLogger(Skill.class);

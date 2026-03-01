@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import com.aionemu.gameserver.model.instancerift.InstanceRiftLocation;
 import com.aionemu.gameserver.model.templates.instancerift.InstanceRiftTemplate;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Rinzler (Encom)
@@ -41,7 +41,7 @@ public class InstanceRiftData {
 	private List<InstanceRiftTemplate> instanceRiftTemplates;
 
 	@XmlTransient
-	private FastMap<Integer, InstanceRiftLocation> instanceRift = new FastMap<Integer, InstanceRiftLocation>();
+	private ConcurrentHashMap<Integer, InstanceRiftLocation> instanceRift = new ConcurrentHashMap<Integer, InstanceRiftLocation>();
 
 	void afterUnmarshal(Unmarshaller u, Object parent) {
 		for (InstanceRiftTemplate template : instanceRiftTemplates) {
@@ -53,7 +53,7 @@ public class InstanceRiftData {
 		return instanceRift.size();
 	}
 
-	public FastMap<Integer, InstanceRiftLocation> getInstanceRiftLocations() {
+	public ConcurrentHashMap<Integer, InstanceRiftLocation> getInstanceRiftLocations() {
 		return instanceRift;
 	}
 }

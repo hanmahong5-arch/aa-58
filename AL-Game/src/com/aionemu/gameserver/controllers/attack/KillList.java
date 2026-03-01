@@ -22,17 +22,17 @@ import java.util.List;
 
 import com.aionemu.gameserver.configs.main.PvPConfig;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Sarynth
  */
 public class KillList {
 
-	private FastMap<Integer, List<Long>> killList;
+	private ConcurrentHashMap<Integer, List<Long>> killList;
 
 	public KillList() {
-		killList = new FastMap<Integer, List<Long>>();
+		killList = new ConcurrentHashMap<Integer, List<Long>>();
 	}
 
 	/**

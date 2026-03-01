@@ -32,7 +32,7 @@ import com.aionemu.gameserver.questEngine.model.QuestState;
 import com.aionemu.gameserver.questEngine.model.QuestStatus;
 import com.aionemu.gameserver.services.QuestService;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ReportToMany extends QuestHandler {
 	private final int startItem;
@@ -41,11 +41,11 @@ public class ReportToMany extends QuestHandler {
 	private final int startDialog;
 	private final int endDialog;
 	private final int maxVar;
-	private final FastMap<Integer, NpcInfos> npcInfos;
+	private final ConcurrentHashMap<Integer, NpcInfos> npcInfos;
 	private boolean mission;
 
 	public ReportToMany(int questId, int startItem, List<Integer> startNpcIds, List<Integer> endNpcIds,
-			FastMap<Integer, NpcInfos> npcInfos, int startDialog, int endDialog, int maxVar, boolean mission) {
+			ConcurrentHashMap<Integer, NpcInfos> npcInfos, int startDialog, int endDialog, int maxVar, boolean mission) {
 		super(questId);
 		this.startItem = startItem;
 		if (startNpcIds != null) {

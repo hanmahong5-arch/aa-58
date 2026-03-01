@@ -37,8 +37,8 @@ import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.utils.ThreadPoolManager;
 import com.aionemu.gameserver.world.World;
 
-import javolution.util.FastList;
-import javolution.util.FastMap;
+import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author KID
@@ -46,7 +46,7 @@ import javolution.util.FastMap;
 public class SurveyService {
 
 	private static final Logger log = LoggerFactory.getLogger(SurveyService.class);
-	private FastMap<Integer, SurveyItem> activeItems;
+	private ConcurrentHashMap<Integer, SurveyItem> activeItems;
 	private final String htmlTemplate;
 
 	public boolean isActive(Player player, int survId) {
@@ -58,7 +58,7 @@ public class SurveyService {
 	}
 
 	public SurveyService() {
-		activeItems = FastMap.newInstance();
+		activeItems = new ConcurrentHashMap<>();
 		this.htmlTemplate = HTMLCache.getInstance().getHTML("surveyTemplate.xhtml");
 		ThreadPoolManager.getInstance().scheduleAtFixedRate(new TaskUpdate(), 2000,
 				SecurityConfig.SURVEY_DELAY * 60000);
@@ -110,7 +110,7 @@ public class SurveyService {
 		if (newList.size() == 0) {
 			return;
 		}
-		List<Integer> players = FastList.newInstance();
+		List<Integer> players = new ArrayList<>();
 		int cnt = 0;
 		for (SurveyItem item : newList) {
 			activeItems.put(item.uniqueId, item);

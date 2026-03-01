@@ -34,17 +34,17 @@ import com.aionemu.gameserver.questEngine.model.QuestStatus;
 import com.aionemu.gameserver.services.QuestService;
 
 import gnu.trove.list.array.TIntArrayList;
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class KillSpawned extends QuestHandler {
 	private final int questId;
 	private final Set<Integer> startNpcs = new HashSet<Integer>();
 	private final Set<Integer> endNpcs = new HashSet<Integer>();
-	private final FastMap<List<Integer>, SpawnedMonster> spawnedMonsters;
+	private final ConcurrentHashMap<List<Integer>, SpawnedMonster> spawnedMonsters;
 	private TIntArrayList spawnerObjects;
 
 	public KillSpawned(int questId, List<Integer> startNpcIds, List<Integer> endNpcIds,
-			FastMap<List<Integer>, SpawnedMonster> spawnedMonsters) {
+			ConcurrentHashMap<List<Integer>, SpawnedMonster> spawnedMonsters) {
 		super(questId);
 		this.questId = questId;
 		this.startNpcs.addAll(startNpcIds);

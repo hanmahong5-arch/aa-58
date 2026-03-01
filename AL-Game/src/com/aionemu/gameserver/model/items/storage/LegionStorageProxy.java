@@ -24,7 +24,7 @@ import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.services.item.ItemPacketService.ItemDeleteType;
 import com.aionemu.gameserver.services.item.ItemPacketService.ItemUpdateType;
 
-import javolution.util.FastList;
+import java.util.ArrayList;
 
 /**
  * @author ATracer
@@ -151,7 +151,7 @@ public class LegionStorageProxy extends Storage {
 	}
 
 	@Override
-	public FastList<Item> getItemsWithKinah() {
+	public ArrayList<Item> getItemsWithKinah() {
 		return storage.getItemsWithKinah();
 	}
 

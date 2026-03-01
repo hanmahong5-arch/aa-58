@@ -48,7 +48,7 @@ import com.aionemu.gameserver.utils.ThreadPoolManager;
 import com.aionemu.gameserver.world.World;
 import com.aionemu.gameserver.world.knownlist.Visitor;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Rinzler (Encom)
@@ -60,12 +60,12 @@ public class RvrService {
 	private static Logger log = LoggerFactory.getLogger(SvsService.class);
 
 	// Brigade General's Urgent Order 4.9.1
-	private final Map<Integer, Rvrlf3df3<?>> activeRvr = new FastMap<Integer, Rvrlf3df3<?>>().shared();
+	private final Map<Integer, Rvrlf3df3<?>> activeRvr = new ConcurrentHashMap<Integer, Rvrlf3df3<?>>();
 	// Heavy Tetran/Kenovikan 5.6
-	private FastMap<Integer, VisibleObject> adventPortal = new FastMap<Integer, VisibleObject>();
-	private FastMap<Integer, VisibleObject> adventEffect = new FastMap<Integer, VisibleObject>();
-	private FastMap<Integer, VisibleObject> adventControl = new FastMap<Integer, VisibleObject>();
-	private FastMap<Integer, VisibleObject> adventDirecting = new FastMap<Integer, VisibleObject>();
+	private ConcurrentHashMap<Integer, VisibleObject> adventPortal = new ConcurrentHashMap<Integer, VisibleObject>();
+	private ConcurrentHashMap<Integer, VisibleObject> adventEffect = new ConcurrentHashMap<Integer, VisibleObject>();
+	private ConcurrentHashMap<Integer, VisibleObject> adventControl = new ConcurrentHashMap<Integer, VisibleObject>();
+	private ConcurrentHashMap<Integer, VisibleObject> adventDirecting = new ConcurrentHashMap<Integer, VisibleObject>();
 
 	public void initRvrLocations() {
 		if (CustomConfig.RVR_ENABLED) {

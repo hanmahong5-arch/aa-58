@@ -16,9 +16,7 @@
  */
 package com.aionemu.gameserver.model.autogroup;
 
-import static ch.lambdaj.Lambda.on;
-import static ch.lambdaj.Lambda.sort;
-
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +43,7 @@ public abstract class AutoInstance extends AbstractLockManager implements AutoIn
 		if (i < count) {
 			return false;
 		}
-		items = sort(items, on(Item.class).getExpireTime());
+		items.sort(Comparator.comparingInt(Item::getExpireTime));
 		for (Item item : items) {
 			long l = player.getInventory().decreaseItemCount(item, count);
 			if (l == 0) {

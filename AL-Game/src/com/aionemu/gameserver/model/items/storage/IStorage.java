@@ -25,7 +25,7 @@ import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.services.item.ItemPacketService.ItemDeleteType;
 import com.aionemu.gameserver.services.item.ItemPacketService.ItemUpdateType;
 
-import javolution.util.FastList;
+import java.util.ArrayList;
 
 /**
  * Public interface for Storage, later will rename probably
@@ -172,7 +172,7 @@ public interface IStorage {
 	/**
 	 * @return
 	 */
-	FastList<Item> getItemsWithKinah();
+	ArrayList<Item> getItemsWithKinah();
 
 	/**
 	 * @return

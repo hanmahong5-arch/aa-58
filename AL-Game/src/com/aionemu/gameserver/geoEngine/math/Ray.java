@@ -65,10 +65,6 @@ public final class Ray implements Cloneable, Collidable {
 		if (dirDotDiffxEdge2 >= 0.0f && (dirDotEdge1xDiff = sign * this.direction.dot(edge1.crossLocal(diff))) >= 0.0f
 				&& (!quad ? dirDotDiffxEdge2 + dirDotEdge1xDiff <= dirDotNorm : dirDotEdge1xDiff <= dirDotNorm)
 				&& (diffDotNorm = -sign * diff.dot(norm)) >= 0.0f) {
-			Vector3f.recycle(tempVa);
-			Vector3f.recycle(tempVb);
-			Vector3f.recycle(tempVc);
-			Vector3f.recycle(tempVd);
 			if (store == null) {
 				return true;
 			}
@@ -83,10 +79,6 @@ public final class Ray implements Cloneable, Collidable {
 			}
 			return true;
 		}
-		Vector3f.recycle(tempVa);
-		Vector3f.recycle(tempVb);
-		Vector3f.recycle(tempVc);
-		Vector3f.recycle(tempVd);
 		return false;
 	}
 
@@ -183,8 +175,6 @@ public final class Ray implements Cloneable, Collidable {
 		}
 		tempVb.subtract(point, tempVa);
 		float len = tempVa.lengthSquared();
-		Vector3f.recycle(tempVa);
-		Vector3f.recycle(tempVb);
 		return len;
 	}
 

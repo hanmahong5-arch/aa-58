@@ -30,15 +30,15 @@ import com.aionemu.gameserver.network.aion.serverpackets.SM_TITLE_INFO;
 import com.aionemu.gameserver.taskmanager.tasks.ExpireTimerTask;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class TitleList {
 
-	private final FastMap<Integer, Title> titles;
+	private final ConcurrentHashMap<Integer, Title> titles;
 	private Player owner;
 
 	public TitleList() {
-		this.titles = new FastMap<Integer, Title>();
+		this.titles = new ConcurrentHashMap<Integer, Title>();
 		this.owner = null;
 	}
 

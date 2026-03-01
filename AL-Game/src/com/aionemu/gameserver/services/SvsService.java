@@ -47,7 +47,7 @@ import com.aionemu.gameserver.utils.ThreadPoolManager;
 import com.aionemu.gameserver.world.World;
 import com.aionemu.gameserver.world.knownlist.Visitor;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Rinzler (Encom)
@@ -59,8 +59,8 @@ public class SvsService {
 	private static Logger log = LoggerFactory.getLogger(SvsService.class);
 	private static final int duration = CustomConfig.SVS_DURATION;
 	// Transidium Annex 4.7
-	private FastMap<Integer, VisibleObject> advanceCorridor = new FastMap<Integer, VisibleObject>();
-	private final Map<Integer, Panesterra<?>> activeSvs = new FastMap<Integer, Panesterra<?>>().shared();
+	private ConcurrentHashMap<Integer, VisibleObject> advanceCorridor = new ConcurrentHashMap<Integer, VisibleObject>();
+	private final Map<Integer, Panesterra<?>> activeSvs = new ConcurrentHashMap<Integer, Panesterra<?>>();
 
 	public void initSvsLocations() {
 		if (CustomConfig.SVS_ENABLED) {

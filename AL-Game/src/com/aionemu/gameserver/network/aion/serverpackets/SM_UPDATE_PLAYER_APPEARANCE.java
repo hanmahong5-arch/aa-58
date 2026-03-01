@@ -23,14 +23,14 @@ import com.aionemu.gameserver.network.aion.AionConnection;
 import com.aionemu.gameserver.network.aion.AionServerPacket;
 import com.aionemu.gameserver.services.EnchantService;
 
-import javolution.util.FastList;
+import java.util.ArrayList;
 
 public class SM_UPDATE_PLAYER_APPEARANCE extends AionServerPacket {
 	public int playerId;
 	public int size;
-	public FastList<Item> items;
+	public ArrayList<Item> items;
 
-	public SM_UPDATE_PLAYER_APPEARANCE(int playerId, FastList<Item> items) {
+	public SM_UPDATE_PLAYER_APPEARANCE(int playerId, ArrayList<Item> items) {
 		this.playerId = playerId;
 		this.items = items;
 		this.size = items.size();

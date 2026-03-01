@@ -54,7 +54,7 @@ import com.aionemu.gameserver.questEngine.model.QuestState;
 import com.aionemu.gameserver.services.item.ItemService;
 import com.aionemu.gameserver.services.transfers.TransferablePlayer;
 
-import javolution.util.FastList;
+import java.util.ArrayList;
 
 public class SM_PTRANSFER_CONTROL extends LsServerPacket {
 	private final Logger log = LoggerFactory.getLogger(SM_PTRANSFER_CONTROL.class);
@@ -340,7 +340,7 @@ public class SM_PTRANSFER_CONTROL extends LsServerPacket {
 			writeD(ps.getDeny());
 			writeD(ps.getDisplay());
 			QuestStateList qsl = player.getQuestStateList();
-			FastList<QuestState> quests = FastList.newInstance();
+			ArrayList<QuestState> quests = new ArrayList<>();
 			for (QuestState qs : qsl.getQuests().values()) {
 				if (qs == null) {
 					log.warn("there are null quest on player " + player.getName() + ". taskId #" + taskId
@@ -358,7 +358,6 @@ public class SM_PTRANSFER_CONTROL extends LsServerPacket {
 				// writeS() next repeat time
 				writeD(qs.getReward());
 			}
-			FastList.recycle(quests);
 		}
 			break;
 		}

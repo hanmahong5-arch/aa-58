@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import com.aionemu.gameserver.model.beritra.BeritraLocation;
 import com.aionemu.gameserver.model.templates.beritra.BeritraTemplate;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Rinzler (Encom)
@@ -41,7 +41,7 @@ public class BeritraData {
 	private List<BeritraTemplate> beritraTemplates;
 
 	@XmlTransient
-	private FastMap<Integer, BeritraLocation> beritra = new FastMap<Integer, BeritraLocation>();
+	private ConcurrentHashMap<Integer, BeritraLocation> beritra = new ConcurrentHashMap<Integer, BeritraLocation>();
 
 	void afterUnmarshal(Unmarshaller u, Object parent) {
 		for (BeritraTemplate template : beritraTemplates) {
@@ -53,7 +53,7 @@ public class BeritraData {
 		return beritra.size();
 	}
 
-	public FastMap<Integer, BeritraLocation> getBeritraLocations() {
+	public ConcurrentHashMap<Integer, BeritraLocation> getBeritraLocations() {
 		return beritra;
 	}
 }

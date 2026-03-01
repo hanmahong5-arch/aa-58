@@ -128,8 +128,6 @@ public class BoundingBox extends BoundingVolume {
 		xExtent = max.x - center.x;
 		yExtent = max.y - center.y;
 		zExtent = max.z - center.z;
-		Vector3f.recycle(min);
-		Vector3f.recycle(max);
 	}
 
 	public void computeFromTris(int[] indices, Mesh mesh, int start, int end) {
@@ -160,9 +158,6 @@ public class BoundingBox extends BoundingVolume {
 		xExtent = max.x - center.x;
 		yExtent = max.y - center.y;
 		zExtent = max.z - center.z;
-		Vector3f.recycle(vect1);
-		Vector3f.recycle(vect2);
-		Triangle.recycle(triangle);
 	}
 
 	public static final void checkMinMax(Vector3f min, Vector3f max, Vector3f point) {
@@ -229,7 +224,6 @@ public class BoundingBox extends BoundingVolume {
 				maxZ = vect1.z;
 			}
 		}
-		Vector3f.recycle(vect1);
 
 		center.set(minX + maxX, minY + maxY, minZ + maxZ);
 		center.multLocal(0.5f);
@@ -264,8 +258,6 @@ public class BoundingBox extends BoundingVolume {
 		box.xExtent = FastMath.abs(vect1.getX());
 		box.yExtent = FastMath.abs(vect1.getY());
 		box.zExtent = FastMath.abs(vect1.getZ());
-		Vector3f.recycle(vect1);
-		Matrix3f.recycle(transMatrix);
 
 		return box;
 	}
@@ -440,8 +432,6 @@ public class BoundingBox extends BoundingVolume {
 		yExtent = vect2.y - center.y;
 		zExtent = vect2.z - center.z;
 
-		Vector3f.recycle(vect1);
-		Vector3f.recycle(vect2);
 		return rVal;
 	}
 
@@ -562,13 +552,6 @@ public class BoundingBox extends BoundingVolume {
 		fDdU.a = diff.dot(Vector3f.UNIT_X);
 		fADdU.a = FastMath.abs(fDdU.a);
 		if (fADdU.a > xExtent && fDdU.a * fWdU.a >= 0.0) {
-			Vector3f.recycle(vect1);
-			Vector3f.recycle(vect2);
-			Array3f.recycle(fWdU);
-			Array3f.recycle(fAWdU);
-			Array3f.recycle(fDdU);
-			Array3f.recycle(fADdU);
-			Array3f.recycle(fAWxDdU);
 			return false;
 		}
 
@@ -577,13 +560,6 @@ public class BoundingBox extends BoundingVolume {
 		fDdU.b = diff.dot(Vector3f.UNIT_Y);
 		fADdU.b = FastMath.abs(fDdU.b);
 		if (fADdU.b > yExtent && fDdU.b * fWdU.b >= 0.0) {
-			Vector3f.recycle(vect1);
-			Vector3f.recycle(vect2);
-			Array3f.recycle(fWdU);
-			Array3f.recycle(fAWdU);
-			Array3f.recycle(fDdU);
-			Array3f.recycle(fADdU);
-			Array3f.recycle(fAWxDdU);
 			return false;
 		}
 
@@ -592,13 +568,6 @@ public class BoundingBox extends BoundingVolume {
 		fDdU.c = diff.dot(Vector3f.UNIT_Z);
 		fADdU.c = FastMath.abs(fDdU.c);
 		if (fADdU.c > zExtent && fDdU.c * fWdU.c >= 0.0) {
-			Vector3f.recycle(vect1);
-			Vector3f.recycle(vect2);
-			Array3f.recycle(fWdU);
-			Array3f.recycle(fAWdU);
-			Array3f.recycle(fDdU);
-			Array3f.recycle(fADdU);
-			Array3f.recycle(fAWxDdU);
 			return false;
 		}
 
@@ -607,48 +576,20 @@ public class BoundingBox extends BoundingVolume {
 		fAWxDdU.a = FastMath.abs(wCrossD.dot(Vector3f.UNIT_X));
 		rhs = yExtent * fAWdU.c + zExtent * fAWdU.b;
 		if (fAWxDdU.a > rhs) {
-			Vector3f.recycle(vect1);
-			Vector3f.recycle(vect2);
-			Array3f.recycle(fWdU);
-			Array3f.recycle(fAWdU);
-			Array3f.recycle(fDdU);
-			Array3f.recycle(fADdU);
-			Array3f.recycle(fAWxDdU);
 			return false;
 		}
 
 		fAWxDdU.b = FastMath.abs(wCrossD.dot(Vector3f.UNIT_Y));
 		rhs = xExtent * fAWdU.c + zExtent * fAWdU.a;
 		if (fAWxDdU.b > rhs) {
-			Vector3f.recycle(vect1);
-			Vector3f.recycle(vect2);
-			Array3f.recycle(fWdU);
-			Array3f.recycle(fAWdU);
-			Array3f.recycle(fDdU);
-			Array3f.recycle(fADdU);
-			Array3f.recycle(fAWxDdU);
 			return false;
 		}
 
 		fAWxDdU.c = FastMath.abs(wCrossD.dot(Vector3f.UNIT_Z));
 		rhs = xExtent * fAWdU.b + yExtent * fAWdU.a;
 		if (fAWxDdU.c > rhs) {
-			Vector3f.recycle(vect1);
-			Vector3f.recycle(vect2);
-			Array3f.recycle(fWdU);
-			Array3f.recycle(fAWdU);
-			Array3f.recycle(fDdU);
-			Array3f.recycle(fADdU);
-			Array3f.recycle(fAWxDdU);
 			return false;
 		}
-		Vector3f.recycle(vect1);
-		Vector3f.recycle(vect2);
-		Array3f.recycle(fWdU);
-		Array3f.recycle(fAWdU);
-		Array3f.recycle(fDdU);
-		Array3f.recycle(fADdU);
-		Array3f.recycle(fAWxDdU);
 		return true;
 	}
 
@@ -666,8 +607,6 @@ public class BoundingBox extends BoundingVolume {
 				&& clip(-direction.x, +diff.x - xExtent, t) && clip(+direction.y, -diff.y - yExtent, t)
 				&& clip(-direction.y, +diff.y - yExtent, t) && clip(+direction.z, -diff.z - zExtent, t)
 				&& clip(-direction.z, +diff.z - zExtent, t);
-		Vector3f.recycle(diff);
-		Vector3f.recycle(direction);
 
 		if (notEntirelyClipped && (t[0] != saveT0 || t[1] != saveT1)) {
 			if (t[1] > t[0]) {

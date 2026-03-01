@@ -41,21 +41,21 @@ import com.aionemu.gameserver.world.World;
 import com.aionemu.gameserver.world.knownlist.Visitor;
 import com.aionemu.gameserver.world.zone.ZoneInstance;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class DuelService {
 	private static Logger log = LoggerFactory.getLogger(DuelService.class);
 
-	private FastMap<Integer, Integer> duels;
-	private FastMap<Integer, Future<?>> timeOutTask;
+	private ConcurrentHashMap<Integer, Integer> duels;
+	private ConcurrentHashMap<Integer, Future<?>> timeOutTask;
 
 	public static final DuelService getInstance() {
 		return SingletonHolder.instance;
 	}
 
 	private DuelService() {
-		this.duels = new FastMap<Integer, Integer>().shared();
-		timeOutTask = new FastMap<Integer, Future<?>>().shared();
+		this.duels = new ConcurrentHashMap<Integer, Integer>();
+		timeOutTask = new ConcurrentHashMap<Integer, Future<?>>();
 	}
 
 	public void onDuelRequest(Player requester, Player responder) {

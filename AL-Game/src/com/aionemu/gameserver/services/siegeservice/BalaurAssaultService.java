@@ -42,13 +42,13 @@ import com.aionemu.gameserver.utils.idfactory.IDFactory;
 import com.aionemu.gameserver.world.World;
 import com.aionemu.gameserver.world.knownlist.Visitor;
 
-import javolution.util.FastList;
-import javolution.util.FastMap;
+import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class BalaurAssaultService {
 	private static final BalaurAssaultService instance = new BalaurAssaultService();
 	private Logger log = LoggerFactory.getLogger("SIEGE_LOG");
-	private final Map<Integer, FortressAssault> fortressAssaults = new FastMap<Integer, FortressAssault>().shared();
+	private final Map<Integer, FortressAssault> fortressAssaults = new ConcurrentHashMap<Integer, FortressAssault>();
 
 	public static BalaurAssaultService getInstance() {
 		return instance;
@@ -398,7 +398,7 @@ public class BalaurAssaultService {
 
 	public void spawnDredgion(int spawnId) {
 		AssembledNpcTemplate template = DataManager.ASSEMBLED_NPC_DATA.getAssembledNpcTemplate(spawnId);
-		FastList<AssembledNpcPart> assembledParts = new FastList<AssembledNpcPart>();
+		ArrayList<AssembledNpcPart> assembledParts = new ArrayList<AssembledNpcPart>();
 		for (AssembledNpcTemplate.AssembledNpcPartTemplate npcPart : template.getAssembledNpcPartTemplates()) {
 			assembledParts.add(new AssembledNpcPart(IDFactory.getInstance().nextId(), npcPart));
 		}

@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlType;
 import com.aionemu.gameserver.questEngine.QuestEngine;
 import com.aionemu.gameserver.questEngine.handlers.template.MonsterHunt;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "MonsterHuntData", propOrder = { "monster" })
@@ -62,7 +62,7 @@ public class MonsterHuntData extends XMLQuest {
 
 	@Override
 	public void register(QuestEngine questEngine) {
-		FastMap<Monster, Set<Integer>> monsterNpcs = new FastMap<Monster, Set<Integer>>();
+		ConcurrentHashMap<Monster, Set<Integer>> monsterNpcs = new ConcurrentHashMap<Monster, Set<Integer>>();
 		for (Monster m : monster) {
 			monsterNpcs.put(m, new HashSet<Integer>(m.getNpcIds()));
 		}

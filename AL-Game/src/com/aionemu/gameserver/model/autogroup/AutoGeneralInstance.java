@@ -16,12 +16,8 @@
  */
 package com.aionemu.gameserver.model.autogroup;
 
-import static ch.lambdaj.Lambda.having;
-import static ch.lambdaj.Lambda.on;
-import static ch.lambdaj.Lambda.select;
-import static org.hamcrest.Matchers.equalTo;
-
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.aionemu.gameserver.dataholders.DataManager;
 import com.aionemu.gameserver.model.PlayerClass;
@@ -134,6 +130,6 @@ public class AutoGeneralInstance extends AutoInstance {
 	}
 
 	private List<AGPlayer> getPlayersByClass(PlayerClass playerClass) {
-		return select(players, having(on(AGPlayer.class).getPlayerClass(), equalTo(playerClass)));
+		return players.values().stream().filter(p -> p.getPlayerClass().equals(playerClass)).collect(Collectors.toList());
 	}
 }

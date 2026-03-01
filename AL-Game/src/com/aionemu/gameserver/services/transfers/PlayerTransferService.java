@@ -40,8 +40,8 @@ import com.aionemu.gameserver.services.item.ItemService;
 import com.aionemu.gameserver.services.player.PlayerService;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 
-import javolution.util.FastList;
-import javolution.util.FastMap;
+import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author KID
@@ -57,8 +57,8 @@ public class PlayerTransferService {
 	}
 
 	private PlayerDAO dao;
-	private Map<Integer, TransferablePlayer> transfers = FastMap.newInstance();
-	private List<Integer> rsList = FastList.newInstance();
+	private Map<Integer, TransferablePlayer> transfers = new ConcurrentHashMap<>();
+	private List<Integer> rsList = new ArrayList<>();
 
 	public PlayerTransferService() {
 		this.dao = DAOManager.getDAO(PlayerDAO.class);

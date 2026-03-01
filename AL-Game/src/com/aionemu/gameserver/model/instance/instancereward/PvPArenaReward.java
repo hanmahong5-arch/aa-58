@@ -16,18 +16,13 @@
  */
 package com.aionemu.gameserver.model.instance.instancereward;
 
-import static ch.lambdaj.Lambda.maxFrom;
-import static ch.lambdaj.Lambda.minFrom;
-import static ch.lambdaj.Lambda.on;
-import static ch.lambdaj.Lambda.sort;
-import static ch.lambdaj.Lambda.sum;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.aionemu.commons.utils.Rnd;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
@@ -42,11 +37,11 @@ import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.world.WorldMapInstance;
 import com.aionemu.gameserver.world.knownlist.Visitor;
 
-import javolution.util.FastList;
+import java.util.ArrayList;
 
 public class PvPArenaReward extends InstanceReward<PvPArenaPlayerReward> {
 	private Map<Integer, Boolean> positions = new HashMap<Integer, Boolean>();
-	private FastList<Integer> zones = new FastList<Integer>();
+	private ArrayList<Integer> zones = new ArrayList<Integer>();
 	private int round = 1;
 	private Integer zone;
 	private int bonusTime;
@@ -165,12 +160,9 @@ public class PvPArenaReward extends InstanceReward<PvPArenaPlayerReward> {
 	}
 
 	public List<PvPArenaPlayerReward> sortPoints() {
-		return sort(getInstanceRewards(), on(PvPArenaPlayerReward.class).getScorePoints(), new Comparator<Integer>() {
-			@Override
-			public int compare(Integer o1, Integer o2) {
-				return o2 != null ? o2.compareTo(o1) : -o1.compareTo(o2);
-			}
-		});
+		return getInstanceRewards().stream()
+				.sorted(Comparator.comparingInt(PvPArenaPlayerReward::getScorePoints).reversed())
+				.collect(Collectors.toList());
 	}
 
 	public boolean canRewardOpportunityToken(PvPArenaPlayerReward rewardedPlayer) {
@@ -192,14 +184,15 @@ public class PvPArenaReward extends InstanceReward<PvPArenaPlayerReward> {
 	}
 
 	public boolean hasCapPoints() {
-		if (isSoloArena()
-				&& (maxFrom(getInstanceRewards()).getPoints() - minFrom(getInstanceRewards()).getPoints() >= 1500))
+		int maxPoints = getInstanceRewards().stream().mapToInt(PvPArenaPlayerReward::getPoints).max().orElse(0);
+		int minPoints = getInstanceRewards().stream().mapToInt(PvPArenaPlayerReward::getPoints).min().orElse(0);
+		if (isSoloArena() && (maxPoints - minPoints >= 1500))
 			return true;
-		return maxFrom(getInstanceRewards()).getPoints() >= capPoints;
+		return maxPoints >= capPoints;
 	}
 
 	public int getTotalPoints() {
-		return sum(getInstanceRewards(), on(PvPArenaPlayerReward.class).getScorePoints());
+		return getInstanceRewards().stream().mapToInt(PvPArenaPlayerReward::getScorePoints).sum();
 	}
 
 	public boolean canRewarded() {

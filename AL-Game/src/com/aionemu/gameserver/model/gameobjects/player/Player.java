@@ -139,8 +139,8 @@ import com.aionemu.gameserver.world.World;
 import com.aionemu.gameserver.world.WorldPosition;
 import com.aionemu.gameserver.world.zone.ZoneInstance;
 
-import javolution.util.FastList;
-import javolution.util.FastMap;
+import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Player extends Creature {
 
@@ -276,7 +276,7 @@ public class Player extends Creature {
 	public long prevPosUT;
 	public byte prevMoveType;
 	private PlayerVarsDAO daoVars = (PlayerVarsDAO) DAOManager.getDAO(PlayerVarsDAO.class);
-	private Map<String, Object> vars = FastMap.newInstance();
+	private Map<String, Object> vars = new ConcurrentHashMap<>();
 	private boolean robot = false;
 	private int robotId = 0;
 	public int A_STATION_TYPE = 0;
@@ -884,8 +884,8 @@ public class Player extends Creature {
 	 * 
 	 * @return
 	 */
-	public FastList<Item> getAllItems() {
-		FastList<Item> items = FastList.newInstance();
+	public ArrayList<Item> getAllItems() {
+		ArrayList<Item> items = new ArrayList<>();
 		items.addAll(this.inventory.getItemsWithKinah());
 		if (this.regularWarehouse != null)
 			items.addAll(this.regularWarehouse.getItemsWithKinah());
@@ -1640,7 +1640,7 @@ public class Player extends Creature {
 	 */
 	public void addItemCoolDown(int delayId, long time, int useDelay) {
 		if (itemCoolDowns == null) {
-			itemCoolDowns = new FastMap<Integer, ItemCooldown>().shared();
+			itemCoolDowns = new ConcurrentHashMap<Integer, ItemCooldown>();
 		}
 		itemCoolDowns.put(delayId, new ItemCooldown(time, useDelay));
 	}
@@ -2990,7 +2990,7 @@ public class Player extends Creature {
 
 	public void addItemMaxCountOfDay(int itemId, int thisCount) {
 		if (maxCountEvent == null) {
-			maxCountEvent = new FastMap<Integer, MaxCountOfDay>().shared();
+			maxCountEvent = new ConcurrentHashMap<Integer, MaxCountOfDay>();
 		}
 		if (maxCountEvent.get(itemId) != null) {
 			maxCountEvent.get(itemId).setThisCount(thisCount);
@@ -3385,7 +3385,7 @@ public class Player extends Creature {
 		return false;
 	}
 
-	private List<DisassembleItem> disassemblyItemLists = new FastList<DisassembleItem>();
+	private List<DisassembleItem> disassemblyItemLists = new ArrayList<DisassembleItem>();
 
 	public List<DisassembleItem> getDisassemblyItemLists() {
 		return disassemblyItemLists;

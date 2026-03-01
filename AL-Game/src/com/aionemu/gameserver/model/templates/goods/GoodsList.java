@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.aionemu.gameserver.model.limiteditems.LimitedItem;
 
-import javolution.util.FastList;
+import java.util.ArrayList;
 
 /**
  * @author ATracer
@@ -59,8 +59,8 @@ public class GoodsList {
 	/**
 	 * return the limitedItems.
 	 */
-	public FastList<LimitedItem> getLimitedItems() {
-		FastList<LimitedItem> limitedItems = new FastList<LimitedItem>();
+	public ArrayList<LimitedItem> getLimitedItems() {
+		ArrayList<LimitedItem> limitedItems = new ArrayList<LimitedItem>();
 		if (items != null) {
 			for (Item item : items) {
 				if (item.getBuyLimit() != null && item.getSellLimit() != null) {

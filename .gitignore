@@ -1,0 +1,23 @@
+# Maven build output
+target/
+
+# Old Ant build output
+build/
+
+# IDE files
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+*.swp
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Runtime files
+*.pid
+*.log
+log/

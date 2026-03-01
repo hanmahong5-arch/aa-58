@@ -21,11 +21,11 @@ import com.aionemu.gameserver.network.aion.serverpackets.SM_INSTANCE_INFO;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_SYSTEM_MESSAGE;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PortalCooldownList {
 	private Player owner;
-	private FastMap<Integer, PortalCooldownItem> portalCooldowns;
+	private ConcurrentHashMap<Integer, PortalCooldownItem> portalCooldowns;
 
 	PortalCooldownList(Player owner) {
 		this.owner = owner;
@@ -71,17 +71,17 @@ public class PortalCooldownList {
 		return portalCooldowns.get(worldId);
 	}
 
-	public FastMap<Integer, PortalCooldownItem> getPortalCoolDowns() {
+	public ConcurrentHashMap<Integer, PortalCooldownItem> getPortalCoolDowns() {
 		return portalCooldowns;
 	}
 
-	public void setPortalCoolDowns(FastMap<Integer, PortalCooldownItem> portalCoolDowns) {
+	public void setPortalCoolDowns(ConcurrentHashMap<Integer, PortalCooldownItem> portalCoolDowns) {
 		this.portalCooldowns = portalCoolDowns;
 	}
 
 	public void addPortalCooldown(int worldId, int entryCount, long useDelay) {
 		if (portalCooldowns == null) {
-			portalCooldowns = new FastMap<Integer, PortalCooldownItem>();
+			portalCooldowns = new ConcurrentHashMap<Integer, PortalCooldownItem>();
 		}
 		portalCooldowns.put(worldId, new PortalCooldownItem(worldId, entryCount, useDelay));
 		if (owner.isInTeam()) {

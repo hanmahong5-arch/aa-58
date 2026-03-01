@@ -18,15 +18,15 @@ package com.aionemu.gameserver.controllers.movement;
 
 import com.aionemu.gameserver.model.gameobjects.Creature;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SeenCreatureList {
 
-	private FastMap<Integer, Creature> seenCreatures;
+	private ConcurrentHashMap<Integer, Creature> seenCreatures;
 
 	public boolean add(Creature creature) {
 		if (seenCreatures == null) {
-			seenCreatures = FastMap.newInstance();
+			seenCreatures = new ConcurrentHashMap<>();
 		}
 		return seenCreatures.putIfAbsent(creature.getObjectId(), creature) == null;
 	}

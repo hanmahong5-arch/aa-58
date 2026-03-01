@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 
 import com.aionemu.gameserver.configs.main.HTMLConfig;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @authors Layane, nbali, savormix, hex1r0, lord_rex
@@ -63,7 +63,7 @@ public final class HTMLCache {
 		return SingletonHolder.INSTANCE;
 	}
 
-	private FastMap<String, String> cache = new FastMap<String, String>(16000);
+	private ConcurrentHashMap<String, String> cache = new ConcurrentHashMap<String, String>(16000);
 
 	private int loadedFiles;
 	private int size;
@@ -94,7 +94,7 @@ public final class HTMLCache {
 			try {
 				ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(getCacheFile())));
 
-				cache = (FastMap<String, String>) ois.readObject();
+				cache = (ConcurrentHashMap<String, String>) ois.readObject();
 
 				for (String html : cache.values()) {
 					loadedFiles++;

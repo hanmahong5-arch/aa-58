@@ -16,33 +16,28 @@
  */
 package com.aionemu.gameserver.model.items.storage;
 
-import static ch.lambdaj.Lambda.having;
-import static ch.lambdaj.Lambda.on;
-import static ch.lambdaj.Lambda.select;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.lessThan;
-
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.aionemu.gameserver.model.gameobjects.Item;
 
-import javolution.util.FastList;
-import javolution.util.FastMap;
+import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ItemStorage {
 	public static final long FIRST_AVAILABLE_SLOT = 65535L;
 
-	private FastMap<Integer, Item> items;
+	private ConcurrentHashMap<Integer, Item> items;
 	private int limit;
 	private int specialLimit;
 	public ItemStorage(StorageType storageType) {
 		this.limit = storageType.getLimit();
 		this.specialLimit = storageType.getSpecialLimit();
-		this.items = FastMap.newInstance();
+		this.items = new ConcurrentHashMap<>();
 	}
 
-	public FastList<Item> getItems() {
-		FastList<Item> temp = FastList.newInstance();
+	public ArrayList<Item> getItems() {
+		ArrayList<Item> temp = new ArrayList<>();
 		temp.addAll(items.values());
 		return temp;
 	}
@@ -69,8 +64,8 @@ public class ItemStorage {
 		return null;
 	}
 
-	public FastList<Item> getItemsById(int itemId) {
-		FastList<Item> temp = FastList.newInstance();
+	public ArrayList<Item> getItemsById(int itemId) {
+		ArrayList<Item> temp = new ArrayList<>();
 		for (Item item : items.values()) {
 			if (item.getItemTemplate().getTemplateId() == itemId) {
 				temp.add(item);
@@ -144,11 +139,11 @@ public class ItemStorage {
 	}
 
 	public List<Item> getSpecialCubeItems() {
-		return select(items.values(), having(on(Item.class).getItemTemplate().getExtraInventoryId(), greaterThan(0)));
+		return items.values().stream().filter(item -> item.getItemTemplate().getExtraInventoryId() > 0).collect(Collectors.toList());
 	}
 
 	public List<Item> getCubeItems() {
-		return select(items.values(), having(on(Item.class).getItemTemplate().getExtraInventoryId(), lessThan(1)));
+		return items.values().stream().filter(item -> item.getItemTemplate().getExtraInventoryId() < 1).collect(Collectors.toList());
 	}
 
 	public int getFreeSlots() {

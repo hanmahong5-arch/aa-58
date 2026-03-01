@@ -46,7 +46,7 @@ import com.aionemu.gameserver.utils.ThreadPoolManager;
 import com.aionemu.gameserver.world.World;
 import com.aionemu.gameserver.world.knownlist.Visitor;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Rinzler (Encom)
@@ -55,8 +55,8 @@ public class ConquestService {
 	private ConquestSchedule conquestSchedule;
 	private Map<Integer, ConquestLocation> conquest;
 	private static final int duration = CustomConfig.CONQUEST_DURATION;
-	private final Map<Integer, ConquestOffering<?>> activeConquest = new FastMap<Integer, ConquestOffering<?>>()
-			.shared();
+	private final Map<Integer, ConquestOffering<?>> activeConquest = new ConcurrentHashMap<Integer, ConquestOffering<?>>()
+			;
 	private static final Logger log = LoggerFactory.getLogger(ZorshivDredgionService.class);
 
 	public void initConquestLocations() {

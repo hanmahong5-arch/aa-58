@@ -24,7 +24,7 @@ import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.templates.zorshivdredgion.ZorshivDredgionTemplate;
 import com.aionemu.gameserver.services.zorshivdredgionservice.ZorshivDredgion;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Rinzler (Encom)
@@ -35,7 +35,7 @@ public class ZorshivDredgionLocation {
 	protected boolean isActive;
 	protected ZorshivDredgionTemplate template;
 	protected ZorshivDredgion<ZorshivDredgionLocation> activeZorshivDredgion;
-	protected FastMap<Integer, Player> players = new FastMap<Integer, Player>();
+	protected ConcurrentHashMap<Integer, Player> players = new ConcurrentHashMap<Integer, Player>();
 	private final List<VisibleObject> spawned = new ArrayList<VisibleObject>();
 
 	public ZorshivDredgionLocation() {
@@ -75,7 +75,7 @@ public class ZorshivDredgionLocation {
 		return spawned;
 	}
 
-	public FastMap<Integer, Player> getPlayers() {
+	public ConcurrentHashMap<Integer, Player> getPlayers() {
 		return players;
 	}
 }

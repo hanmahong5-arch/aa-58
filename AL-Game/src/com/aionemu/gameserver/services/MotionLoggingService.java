@@ -50,7 +50,7 @@ import com.aionemu.gameserver.skillengine.model.Times;
 import com.aionemu.gameserver.skillengine.model.WeaponTypeWrapper;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author kecimis
@@ -59,7 +59,7 @@ public class MotionLoggingService {
 
 	private static Logger log = LoggerFactory.getLogger(MotionLoggingService.class);
 
-	private FastMap<String, MotionLog> motionsMap = new FastMap<String, MotionLog>().shared();
+	private ConcurrentHashMap<String, MotionLog> motionsMap = new ConcurrentHashMap<String, MotionLog>();
 
 	private boolean advancedLog = false;
 
@@ -365,18 +365,15 @@ public class MotionLoggingService {
 
 	// save to sql
 	public void saveToSql() {
-		Connection con = null;
+		final String INSERT_QUERY = "INSERT INTO skill_motions (motion_name, weapon_type, off_weapon_type, skill_id, attack_speed, race, gender, time) VALUES (?,?,?,?,?,?,?,?) "
+			+ "ON CONFLICT (motion_name, skill_id, attack_speed, weapon_type, off_weapon_type, gender) DO UPDATE SET time = EXCLUDED.time";
 
-		final String INSERT_QUERY = "INSERT INTO skill_motions (motion_name, weapon_type, off_weapon_type, skill_id, attack_speed, race, gender, time) VALUES (?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE motion_name = ?";
-
-		try {
-			con = DatabaseFactory.getConnection();
-			PreparedStatement stmt = con.prepareStatement(INSERT_QUERY);
+		try (Connection con = DatabaseFactory.getConnection();
+			 PreparedStatement stmt = con.prepareStatement(INSERT_QUERY)) {
 			for (Entry<String, MotionLog> entry : motionsMap.entrySet()) {
 				String motionName = entry.getKey();
 				// set motion_name
 				stmt.setString(1, motionName);
-				stmt.setString(9, motionName);
 				if (entry.getValue() == null) {
 					continue;
 				}
@@ -407,11 +404,8 @@ public class MotionLoggingService {
 					}
 				}
 			}
-			stmt.close();
 		} catch (SQLException e) {
 			log.error("MotionLoggingService", e);
-		} finally {
-			DatabaseFactory.close(con);
 		}
 	}
 
@@ -518,9 +512,9 @@ public class MotionLoggingService {
 	}
 
 	private class MotionLog {
-		private FastMap<WeaponTypeWrapper, List<SkillTime>> motionsForWeapons = new FastMap<WeaponTypeWrapper, List<SkillTime>>();
+		private ConcurrentHashMap<WeaponTypeWrapper, List<SkillTime>> motionsForWeapons = new ConcurrentHashMap<WeaponTypeWrapper, List<SkillTime>>();
 
-		public FastMap<WeaponTypeWrapper, List<SkillTime>> getMotionLog() {
+		public ConcurrentHashMap<WeaponTypeWrapper, List<SkillTime>> getMotionLog() {
 			return this.motionsForWeapons;
 		}
 

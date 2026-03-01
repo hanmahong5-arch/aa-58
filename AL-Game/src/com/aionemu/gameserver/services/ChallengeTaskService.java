@@ -47,7 +47,7 @@ import com.aionemu.gameserver.services.mail.SystemMailService;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.world.World;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ChallengeTaskService {
 	private static final Logger log = LoggerFactory.getLogger(ChallengeTaskService.class);
@@ -63,8 +63,8 @@ public class ChallengeTaskService {
 	}
 
 	private ChallengeTaskService() {
-		cityTasks = new FastMap<Integer, Map<Integer, ChallengeTask>>().shared();
-		legionTasks = new FastMap<Integer, Map<Integer, ChallengeTask>>().shared();
+		cityTasks = new ConcurrentHashMap<Integer, Map<Integer, ChallengeTask>>();
+		legionTasks = new ConcurrentHashMap<Integer, Map<Integer, ChallengeTask>>();
 		log.info("ChallengeTaskService initialized.");
 	}
 

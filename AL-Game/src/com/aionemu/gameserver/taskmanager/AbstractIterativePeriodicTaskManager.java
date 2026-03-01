@@ -17,20 +17,20 @@
 package com.aionemu.gameserver.taskmanager;
 
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.aionemu.commons.utils.concurrent.RunnableStatsManager;
 
-import javolution.util.FastSet;
 
 /**
  * @author NB4L1
  */
 public abstract class AbstractIterativePeriodicTaskManager<T> extends AbstractPeriodicTaskManager {
 
-	private final Set<T> startList = new FastSet<T>();
-	private final Set<T> stopList = new FastSet<T>();
+	private final Set<T> startList = ConcurrentHashMap.newKeySet();
+	private final Set<T> stopList = ConcurrentHashMap.newKeySet();
 
-	private final FastSet<T> activeTasks = new FastSet<T>();
+	private final Set<T> activeTasks = ConcurrentHashMap.newKeySet();
 
 	protected AbstractIterativePeriodicTaskManager(int period) {
 		super(period);
@@ -83,8 +83,7 @@ public abstract class AbstractIterativePeriodicTaskManager<T> extends AbstractPe
 			writeUnlock();
 		}
 
-		for (FastSet.Record r = activeTasks.head(), end = activeTasks.tail(); (r = r.getNext()) != end;) {
-			final T task = activeTasks.valueOf(r);
+		for (T task : activeTasks) {
 			final long begin = System.nanoTime();
 
 			try {

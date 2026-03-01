@@ -23,7 +23,7 @@ import com.aionemu.gameserver.model.siege.SiegeType;
 import com.aionemu.gameserver.network.aion.AionConnection;
 import com.aionemu.gameserver.network.aion.AionServerPacket;
 
-import javolution.util.FastList;
+import java.util.ArrayList;
 
 public class SM_ABYSS_ARTIFACT_INFO extends AionServerPacket {
 
@@ -35,7 +35,7 @@ public class SM_ABYSS_ARTIFACT_INFO extends AionServerPacket {
 
 	@Override
 	protected void writeImpl(AionConnection con) {
-		FastList<SiegeLocation> validLocations = new FastList<SiegeLocation>();
+		ArrayList<SiegeLocation> validLocations = new ArrayList<SiegeLocation>();
 		for (SiegeLocation loc : locations) {
 			if (((loc.getType() == SiegeType.ARTIFACT) || (loc.getType() == SiegeType.FORTRESS))
 					&& (loc.getLocationId() >= 1011) && (loc.getLocationId() <= 10412))

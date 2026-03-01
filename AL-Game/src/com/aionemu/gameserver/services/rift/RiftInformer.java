@@ -29,7 +29,7 @@ import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.world.World;
 import com.aionemu.gameserver.world.knownlist.Visitor;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /****/
 /**
@@ -123,8 +123,8 @@ public class RiftInformer {
 		});
 	}
 
-	private static FastMap<Integer, Integer> getAnnounceData(int worldId) {
-		FastMap<Integer, Integer> localRifts = new FastMap<Integer, Integer>();
+	private static ConcurrentHashMap<Integer, Integer> getAnnounceData(int worldId) {
+		ConcurrentHashMap<Integer, Integer> localRifts = new ConcurrentHashMap<Integer, Integer>();
 		for (int i = 0; i < 8; i++) {
 			localRifts.put(i, 0);
 		}
@@ -135,20 +135,20 @@ public class RiftInformer {
 		return localRifts;
 	}
 
-	private static FastMap<Integer, Integer> calcRiftsData(RVController rift, FastMap<Integer, Integer> local) {
+	private static ConcurrentHashMap<Integer, Integer> calcRiftsData(RVController rift, ConcurrentHashMap<Integer, Integer> local) {
 		if (rift.isMaster()) {
-			local.putEntry(0, local.get(0) + 1);
+			local.put(0, local.get(0) + 1);
 			if (rift.isVortex()) {
-				local.putEntry(1, local.get(1) + 1);
+				local.put(1, local.get(1) + 1);
 			}
-			local.putEntry(2, local.get(2) + 1);
-			local.putEntry(3, local.get(3) + 1);
-			local.putEntry(4, local.get(4) + 1);
+			local.put(2, local.get(2) + 1);
+			local.put(3, local.get(3) + 1);
+			local.put(4, local.get(4) + 1);
 		} else {
-			local.putEntry(5, local.get(5) + 1);
-			local.putEntry(6, local.get(6) + 1);
+			local.put(5, local.get(5) + 1);
+			local.put(6, local.get(6) + 1);
 			if (rift.isVortex()) {
-				local.putEntry(7, local.get(7) + 1);
+				local.put(7, local.get(7) + 1);
 			}
 		}
 		return local;

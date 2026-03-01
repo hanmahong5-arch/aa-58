@@ -24,7 +24,7 @@ import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.templates.anoha.AnohaTemplate;
 import com.aionemu.gameserver.services.anohaservice.BerserkAnoha;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Rinzler (Encom)
@@ -35,7 +35,7 @@ public class AnohaLocation {
 	protected boolean isActive;
 	protected AnohaTemplate template;
 	protected BerserkAnoha<AnohaLocation> activeAnoha;
-	protected FastMap<Integer, Player> players = new FastMap<Integer, Player>();
+	protected ConcurrentHashMap<Integer, Player> players = new ConcurrentHashMap<Integer, Player>();
 	private final List<VisibleObject> spawned = new ArrayList<VisibleObject>();
 
 	public AnohaLocation() {
@@ -71,7 +71,7 @@ public class AnohaLocation {
 		return spawned;
 	}
 
-	public FastMap<Integer, Player> getPlayers() {
+	public ConcurrentHashMap<Integer, Player> getPlayers() {
 		return players;
 	}
 }

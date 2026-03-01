@@ -31,13 +31,13 @@ import com.aionemu.gameserver.services.AutoGroupService;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.world.World;
 
-import javolution.util.FastList;
+import java.util.ArrayList;
 
 public class DredgionService2 {
 	private static final Logger log = LoggerFactory.getLogger(DredgionService2.class);
 
 	private boolean registerAvailable;
-	private FastList<Integer> playersWithCooldown = new FastList<Integer>();
+	private ArrayList<Integer> playersWithCooldown = new ArrayList<Integer>();
 	private SM_AUTO_GROUP[] autoGroupUnreg, autoGroupReg;
 	private final byte maskLvlGradeC = 1, maskLvlGradeB = 2, maskLvlGradeA = 3;
 	public static final byte minLevel = 46, capLevel = 61;

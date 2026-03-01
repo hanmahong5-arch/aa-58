@@ -90,4 +90,18 @@ public class GeoDataConfig {
 
     @Property(key = "gameserver.geo.nav.softcache.enable", defaultValue = "false")
     public static boolean GEO_NAV_SOFT_CACHE;
+
+	// --- recast4j NavMesh integration ---
+
+	@Property(key = "gameserver.geo.nav.recast.enable", defaultValue = "false")
+	public static boolean GEO_NAV_RECAST_ENABLE;
+
+	@Property(key = "gameserver.geo.nav.recast.data.dir", defaultValue = "./data/nav/recast/")
+	public static String GEO_NAV_RECAST_DATA_DIR;
+
+	@Property(key = "gameserver.geo.nav.aerial.enable", defaultValue = "false")
+	public static boolean GEO_NAV_AERIAL_ENABLE;
+
+	@Property(key = "gameserver.geo.nav.sliced.pathfinding", defaultValue = "true")
+	public static boolean GEO_NAV_SLICED_PATHFINDING;
 }

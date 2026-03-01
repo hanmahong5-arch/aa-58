@@ -35,7 +35,7 @@ import com.aionemu.gameserver.model.siege.SiegeShield;
 import com.aionemu.gameserver.model.templates.shield.ShieldTemplate;
 import com.aionemu.gameserver.world.zone.ZoneInstance;
 
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ShieldService {
 	Logger log = LoggerFactory.getLogger(ShieldService.class);
@@ -45,8 +45,8 @@ public class ShieldService {
 		protected static final ShieldService instance = new ShieldService();
 	}
 
-	private final FastMap<Integer, Shield> sphereShields = new FastMap<Integer, Shield>();
-	private final FastMap<Integer, List<SiegeShield>> registeredShields = new FastMap<Integer, List<SiegeShield>>(0);
+	private final ConcurrentHashMap<Integer, Shield> sphereShields = new ConcurrentHashMap<Integer, Shield>();
+	private final ConcurrentHashMap<Integer, List<SiegeShield>> registeredShields = new ConcurrentHashMap<Integer, List<SiegeShield>>(0);
 
 	public static final ShieldService getInstance() {
 		return SingletonHolder.instance;

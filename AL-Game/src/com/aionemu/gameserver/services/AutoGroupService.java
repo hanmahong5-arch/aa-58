@@ -16,11 +16,6 @@
  */
 package com.aionemu.gameserver.services;
 
-import static ch.lambdaj.Lambda.having;
-import static ch.lambdaj.Lambda.on;
-import static ch.lambdaj.Lambda.select;
-import static org.hamcrest.Matchers.equalTo;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -66,15 +61,15 @@ import com.aionemu.gameserver.world.WorldMap;
 import com.aionemu.gameserver.world.WorldMapInstance;
 import com.aionemu.gameserver.world.WorldMapInstanceFactory;
 
-import javolution.util.FastList;
-import javolution.util.FastMap;
+import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class AutoGroupService {
 
 	private Logger log = LoggerFactory.getLogger(AutoGroupService.class);
-	private FastMap<Integer, LookingForParty> searchers = new FastMap<Integer, LookingForParty>().shared();
-	private FastMap<Integer, AutoInstance> autoInstances = new FastMap<Integer, AutoInstance>().shared();
-	private Collection<Integer> penaltys = new FastList<Integer>().shared();
+	private ConcurrentHashMap<Integer, LookingForParty> searchers = new ConcurrentHashMap<Integer, LookingForParty>();
+	private ConcurrentHashMap<Integer, AutoInstance> autoInstances = new ConcurrentHashMap<Integer, AutoInstance>();
+	private Collection<Integer> penaltys = new ArrayList<Integer>();
 	private Lock lock = new ReentrantLock();
 
 	private AutoGroupService() {
@@ -487,7 +482,7 @@ public class AutoGroupService {
 				WorldMapInstance instance = autoInstance.instance;
 				if (instance != null) {
 					autoInstance.players.get(obj).setOnline(false);
-					if (select(autoInstance.players, having(on(AGPlayer.class).isOnline(), equalTo(true))).isEmpty()) {
+					if (autoInstance.players.values().stream().noneMatch(AGPlayer::isOnline)) {
 						autoInstance = autoInstances.remove(instanceId);
 						InstanceService.destroyInstance(instance);
 						autoInstance.clear();
@@ -504,7 +499,7 @@ public class AutoGroupService {
 			AutoInstance autoInstance = autoInstances.get(instanceId);
 			if (autoInstance != null && autoInstance.players.containsKey(obj)) {
 				autoInstance.onLeaveInstance(player);
-				if (select(autoInstance.players, having(on(AGPlayer.class).isOnline(), equalTo(true))).isEmpty()) {
+				if (autoInstance.players.values().stream().noneMatch(AGPlayer::isOnline)) {
 					WorldMapInstance instance = autoInstance.instance;
 					autoInstances.remove(instanceId);
 					if (instance != null) {

@@ -50,7 +50,7 @@ import com.aionemu.gameserver.world.WorldMapInstanceFactory;
 import com.aionemu.gameserver.world.WorldMapType;
 import com.aionemu.gameserver.world.zone.ZoneInstance;
 
-import javolution.util.FastList;
+import java.util.ArrayList;
 
 /****/
 /**
@@ -59,8 +59,8 @@ import javolution.util.FastList;
 
 public class InstanceService {
 	private static final Logger log = LoggerFactory.getLogger(InstanceService.class);
-	private static final FastList<Integer> instanceAggro = new FastList<Integer>();
-	private static final FastList<Integer> instanceCoolDownFilter = new FastList<Integer>();
+	private static final ArrayList<Integer> instanceAggro = new ArrayList<Integer>();
+	private static final ArrayList<Integer> instanceCoolDownFilter = new ArrayList<Integer>();
 	private static final int SOLO_INSTANCES_DESTROY_DELAY = 2 * 60 * 1000;
 
 	public static void load() {

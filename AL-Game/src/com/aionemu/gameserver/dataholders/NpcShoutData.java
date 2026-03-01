@@ -33,7 +33,7 @@ import com.aionemu.gameserver.model.templates.npcshout.ShoutGroup;
 import com.aionemu.gameserver.model.templates.npcshout.ShoutList;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
-import javolution.util.FastMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Rolandas
@@ -67,7 +67,7 @@ public class NpcShoutData {
 	protected List<ShoutGroup> shoutGroups;
 
 	@XmlTransient
-	private TIntObjectHashMap<FastMap<Integer, List<NpcShout>>> shoutsByWorldNpcs = new TIntObjectHashMap<FastMap<Integer, List<NpcShout>>>();
+	private TIntObjectHashMap<ConcurrentHashMap<Integer, List<NpcShout>>> shoutsByWorldNpcs = new TIntObjectHashMap<ConcurrentHashMap<Integer, List<NpcShout>>>();
 
 	@XmlTransient
 	private int count = 0;
@@ -78,9 +78,9 @@ public class NpcShoutData {
 				ShoutList shoutList = group.getShoutNpcs().get(i);
 				int worldId = shoutList.getRestrictWorld();
 
-				FastMap<Integer, List<NpcShout>> worldShouts = shoutsByWorldNpcs.get(worldId);
+				ConcurrentHashMap<Integer, List<NpcShout>> worldShouts = shoutsByWorldNpcs.get(worldId);
 				if (worldShouts == null) {
-					worldShouts = FastMap.newInstance();
+					worldShouts = new ConcurrentHashMap<>();
 					this.shoutsByWorldNpcs.put(worldId, worldShouts);
 				}
 
@@ -116,7 +116,7 @@ public class NpcShoutData {
 	 * @return null if not found
 	 */
 	public List<NpcShout> getNpcShouts(int worldId, int npcId) {
-		FastMap<Integer, List<NpcShout>> worldShouts = shoutsByWorldNpcs.get(0);
+		ConcurrentHashMap<Integer, List<NpcShout>> worldShouts = shoutsByWorldNpcs.get(0);
 
 		if (worldShouts == null || worldShouts.get(npcId) == null) {
 			worldShouts = shoutsByWorldNpcs.get(worldId);
@@ -139,7 +139,7 @@ public class NpcShoutData {
 	 * {@link #getNpcShouts(int worldId, int npcId)})
 	 */
 	public boolean hasAnyShout(int worldId, int npcId) {
-		FastMap<Integer, List<NpcShout>> worldShouts = shoutsByWorldNpcs.get(0);
+		ConcurrentHashMap<Integer, List<NpcShout>> worldShouts = shoutsByWorldNpcs.get(0);
 
 		if (worldShouts == null || worldShouts.get(npcId) == null) {
 			worldShouts = shoutsByWorldNpcs.get(worldId);

@@ -185,6 +185,13 @@ public class CM_BUY_ITEM extends AionClientPacket {
 					TradeService.performBuyFromRewardShop(npc, player, tradeList);
 				}
 				break;
+			case 16: // [Buy From Legion Coin / Abyss Kinah Shop]
+				if (tlist != null && tlist.getTradeNpcType() == TradeNpcType.LEGION_COIN) {
+					TradeService.performBuyFromRewardShop(npc, player, tradeList);
+				} else if (tlist != null && tlist.getTradeNpcType() == TradeNpcType.ABYSS_KINAH) {
+					TradeService.performBuyFromShop(npc, player, tradeList);
+				}
+				break;
 			case 17: // [Pet Seller]
 				TradeService.performSellForKinahToShop(player, tradeList, purchaseTemplate);
 				break;
