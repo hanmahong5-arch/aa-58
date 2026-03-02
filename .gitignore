@@ -21,3 +21,4 @@ Thumbs.db
 *.pid
 *.log
 log/
+run-test/AL-Game/cache/static_data.xml
