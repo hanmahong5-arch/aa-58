@@ -380,7 +380,7 @@ public class SiegeService {
 	}
 
 	public void deSpawnNpcs(int siegeLocationId) {
-		Collection<SiegeNpc> siegeNpcs = World.getInstance().getLocalSiegeNpcs(siegeLocationId);
+		List<SiegeNpc> siegeNpcs = new java.util.ArrayList<>(World.getInstance().getLocalSiegeNpcs(siegeLocationId));
 		for (SiegeNpc npc : siegeNpcs) {
 			npc.getController().onDelete();
 		}
